@@ -1,0 +1,26 @@
+import React from "react"
+
+import DateField from "../components/dateField"
+import RadioField from "../components/radioField"
+import SelectField from "../components/selectField"
+import TextField from "../components/textField"
+import TextAreaField from "../components/textAreaField"
+
+const Field = ({ field, formId, inputs, handleInputChange, setInputValue }) => {
+    switch (field.type) {
+        case 'date':
+            return <DateField key={field.id} formId={formId} field={field} inputs={inputs} setInputValue={setInputValue} />
+        case 'radio':
+            return <RadioField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
+        case 'select':
+            return <SelectField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
+        case 'text':
+            return <TextField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
+        case 'textarea':
+            return <TextAreaField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
+    }
+
+    return <p key={Math.random()}>{field.type}</p>
+}
+
+export default Field

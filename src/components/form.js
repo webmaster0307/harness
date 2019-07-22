@@ -1,16 +1,29 @@
 import React, { useState } from "react"
 
-import TextField from "../components/textField"
-import TextAreaField from "../components/textAreaField"
-import SelectField from "../components/selectField"
-import RadioField from "../components/radioField"
-import DateField from "../components/dateField"
+import FormPage from "../components/formPage"
+import Field from "../components/field"
 
 const Form = ({form}) => {
   const [inputs, setInputs] = useState({})
-  const [pages, setPages] = useState({})
+  const [visiblePage, setVisiblePage] = useState(0)
   const { formId, button: { text: submitButtonText} } = form
   const fields = form.fields.nodes
+
+  const getPageGroups = fields => {
+    const pageGroups = []
+    let index = 0
+
+    fields.forEach(field => {
+      if ( 'page' !== field.type) {
+        if (!pageGroups[ index ]) pageGroups[ index ] = []
+        pageGroups[ index ].push(field)
+      } else {
+        index++
+      }
+    })
+
+    return pageGroups
+  }
 
   const handleInputChange = event => {
     const { name, value } = event.target
@@ -26,9 +39,6 @@ const Form = ({form}) => {
       console.log('form submitted')
   }
 
-  const pageFields = fields.filter(field => 'page' === field.type)
-  setPages(pageFields)
-
   // Fake auto-setting fields for ESFox
   if (inputs[`input_1`]) {
     setTimeout( () => {
@@ -39,26 +49,38 @@ const Form = ({form}) => {
     }, 400 )
   }
 
+  const pageGroups = getPageGroups(fields)
+  const totalPages = pageGroups.length
+
   return (
-    <form id={`gravity-form-${formId}`} classname="gravity-form" method="post" encType="multipart/form-data" onSubmit={handleSubmit}>
-      {fields.map( field => {
-        if ( 'page' === field.type ) {
-          return <PageField key={field.id} formId={formId} field={field} pageFields={pageFields} />
-        } else if ( 'text' === field.type ) {
-          return <TextField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
-        } else if ( 'textarea' === field.type ) {
-          return <TextAreaField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
-        } else if ( 'select' === field.type ) {
-          return <SelectField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
-        } else if ( 'radio' === field.type ) {
-          return <RadioField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
-        } else if ( 'date' === field.type ) {
-          return <DateField key={field.id} formId={formId} field={field} inputs={inputs} setInputValue={setInputValue} />
-        } else {
-          return <p key={Math.random()}>{field.type}</p>
-        }
-      })}
-      <input type="submit" value={submitButtonText} />
+    <form
+      id={`gravity-form-${formId}`}
+      className="gravity-form"
+      method="post"
+      encType="multipart/form-data"
+      onSubmit={handleSubmit}
+    >
+      {pageGroups.map((pageGroup, pageIndex) => (
+        <FormPage
+          key={pageIndex}
+          pageIndex={pageIndex}
+          visiblePage={visiblePage}
+          totalPages={totalPages}
+          setVisiblePage={setVisiblePage}
+          submitButtonText={submitButtonText}
+        >
+          {pageGroup.map(field => (
+              <Field
+                key={field.id}
+                field={field}
+                formId={formId}
+                inputs={inputs}
+                handleInputChange={handleInputChange}
+                setInputValue={setInputValue}
+              />
+          ))}
+        </FormPage>
+      ))}
     </form>
   )
 }
