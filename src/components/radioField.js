@@ -2,22 +2,21 @@ import React from 'react'
 
 const RadioField = ({ formId, field, inputs, handleInputChange }) => {
   const { id, label, isRequired, choices } = field
-  const htmlId = `input_${formId}_${id}`
 
   return (
     <>
         <p>{label}</p>
-        {choices.map(({text, value}) => (
+        {choices.map(({text, value}, index) => (
             <div key={value}>
                 <input
                     type="radio"
-                    id={htmlId}
+                    id={`choice_${formId}_${id}_${index}`}
                     name={`input_${id}`}
                     value={value}
                     onChange={handleInputChange}
                     required={isRequired}
                 />
-                <label htmlFor={htmlId}>{text}</label>
+                <label htmlFor={`choice_${formId}_${id}_${index}`}>{text}</label>
             </div>
         ))}
     </>

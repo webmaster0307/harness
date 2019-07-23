@@ -28,10 +28,13 @@ const Form = ({form}) => {
   const handleInputChange = event => {
     const { name, value } = event.target
     setInputValue(name, value)
+    // TODO: update to store ID, not name.
   }
 
-  const setInputValue = (name, value) => {
-    setInputs(inputs => ({...inputs, [name]: value}))
+  const setInputValue = (id, value) => {
+    setInputs(inputs => ({...inputs, [id]: value}))
+    // @TODO: remove
+    setTimeout( () => console.log(inputs), 500)
   }
 
   const handleSubmit = event => {

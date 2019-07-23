@@ -1,6 +1,7 @@
 import React from "react"
 
 import DateField from "../components/dateField"
+import MultiSelectField from "./multiSelectField"
 import RadioField from "../components/radioField"
 import SelectField from "../components/selectField"
 import TextField from "../components/textField"
@@ -18,6 +19,8 @@ const Field = ({ field, formId, inputs, handleInputChange, setInputValue }) => {
             return <TextField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
         case 'textarea':
             return <TextAreaField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
+        case 'multiselect':
+            return <MultiSelectField key={field.id} field={field} setInputValue={setInputValue} />
     }
 
     return <p key={Math.random()}>{field.type}</p>
