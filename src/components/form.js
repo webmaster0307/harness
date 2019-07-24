@@ -25,21 +25,20 @@ const Form = ({form}) => {
     return pageGroups
   }
 
-  const handleInputChange = event => {
-    const { name, value } = event.target
-    setInputValue(name, value)
-    // TODO: update to store ID, not name.
+  const handleInputChange = (id, event) => {
+    const { value } = event.target
+    setInputValue(id, value)
   }
 
   const setInputValue = (id, value) => {
     setInputs(inputs => ({...inputs, [id]: value}))
-    // @TODO: remove
-    setTimeout( () => console.log(inputs), 500)
   }
 
   const handleSubmit = event => {
       event.preventDefault()
       console.log('form submitted')
+      console.log('"inputs" values:')
+      console.log(inputs)
   }
 
   // Fake auto-setting fields for ESFox
@@ -73,14 +72,14 @@ const Form = ({form}) => {
           submitButtonText={submitButtonText}
         >
           {pageGroup.map(field => (
-              <Field
-                key={field.id}
-                field={field}
-                formId={formId}
-                inputs={inputs}
-                handleInputChange={handleInputChange}
-                setInputValue={setInputValue}
-              />
+            <Field
+              key={field.id}
+              field={field}
+              formId={formId}
+              inputs={inputs}
+              handleInputChange={handleInputChange}
+              setInputValue={setInputValue}
+            />
           ))}
         </FormPage>
       ))}

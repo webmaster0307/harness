@@ -26,7 +26,7 @@ export const formQuery = graphql`
         id
         formId
         title
-        fields {
+        fields(first: 200) {
           nodes {
             __typename
             ... on WPGraphQL_TextField {
@@ -71,6 +71,16 @@ export const formQuery = graphql`
               }
             }
             ... on WPGraphQL_PageField {
+              type
+              id
+              label
+            }
+            ... on WPGraphQL_SectionField {
+              type
+              id
+              label
+            }
+            ... on WPGraphQL_SignatureField {
               type
               id
               label

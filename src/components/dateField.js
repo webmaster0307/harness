@@ -11,7 +11,6 @@ const DateField = ({ formId, field, inputs, setInputValue }) => {
     const handleDayClick = dateObject => {
         setDay(dateObject)
         setInputValue(id, formatDate(dateObject))
-        console.log(day)
     }
 
     const formatDate = dateObject => {

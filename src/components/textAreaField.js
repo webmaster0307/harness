@@ -11,7 +11,7 @@ const TextAreaField = ({ formId, field, inputs, handleInputChange }) => {
                 id={htmlId}
                 name={`input_${id}`}
                 value={inputs[`input_${id}`]}
-                onChange={handleInputChange}
+                onChange={event => handleInputChange(id, event)}
                 required={isRequired}
             />
         </>

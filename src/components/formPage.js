@@ -6,7 +6,7 @@ const FormPage = ({pageIndex, visiblePage, totalPages, setVisiblePage, submitBut
   const isLastPage = pageIndex => totalPages === pageIndex + 1
 
   return (
-    <div className="page" style={{display: pageIndex === visiblePage ? 'block' : 'none'}}>
+    <div className="page" style={{display: pageIndex === visiblePage ? 'block' : 'block'}}>
       {children}
       <FormPageNav pageIndex={pageIndex} totalPages={totalPages} setVisiblePage={setVisiblePage} />
       {isLastPage(pageIndex) &&

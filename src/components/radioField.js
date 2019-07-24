@@ -13,7 +13,7 @@ const RadioField = ({ formId, field, inputs, handleInputChange }) => {
                     id={`choice_${formId}_${id}_${index}`}
                     name={`input_${id}`}
                     value={value}
-                    onChange={handleInputChange}
+                    onChange={event => handleInputChange(id, event)}
                     required={isRequired}
                 />
                 <label htmlFor={`choice_${formId}_${id}_${index}`}>{text}</label>
