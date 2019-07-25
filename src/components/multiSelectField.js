@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
 import styled from 'styled-components'
@@ -88,8 +88,6 @@ const ArrowIcon = ({isOpen}) => (
 )
 
 class MultiDownshift extends React.Component {
-  state = {selectedItems: []}
-
   stateReducer = (state, changes) => {
     switch (changes.type) {
       case Downshift.stateChangeTypes.keyDownEnter:
@@ -105,55 +103,21 @@ class MultiDownshift extends React.Component {
     }
   }
 
-  handleSelection = (selectedItem, downshift) => {
-    const callOnChange = () => {
-      const {onSelect, onChange} = this.props
-      const {selectedItems} = this.state
-      if (onSelect) {
-        onSelect(selectedItems, this.getStateAndHelpers(downshift))
-      }
-      if (onChange) {
-        onChange(selectedItems, this.getStateAndHelpers(downshift))
-      }
-    }
-    if (this.state.selectedItems.includes(selectedItem)) {
-      this.removeItem(selectedItem, callOnChange)
-    } else {
-      this.addSelectedItem(selectedItem, callOnChange)
-    }
-  }
-
-  removeItem = (item, cb) => {
-    this.setState(({selectedItems}) => {
-      return {
-        selectedItems: selectedItems.filter(i => i !== item),
-      }
-    }, cb)
-  }
-  addSelectedItem(item, cb) {
-    this.setState(
-      ({selectedItems}) => ({
-        selectedItems: [...selectedItems, item],
-      }),
-      cb,
-    )
-  }
-
   getRemoveButtonProps = ({onClick, item, ...props} = {}) => {
     return {
       onClick: e => {
         // TODO: use something like downshift's composeEventHandlers utility instead
         onClick && onClick(e)
         e.stopPropagation()
-        this.removeItem(item)
+        this.props.removeItem(item)
       },
       ...props,
     }
   }
 
   getStateAndHelpers(downshift) {
-    const {selectedItems} = this.state
-    const {getRemoveButtonProps, removeItem} = this
+    const { selectedItems, removeItem } = this.props
+    const { getRemoveButtonProps } = this
     return {
       getRemoveButtonProps,
       removeItem,
@@ -161,14 +125,15 @@ class MultiDownshift extends React.Component {
       ...downshift,
     }
   }
+
   render() {
-    const {render, children = render, ...props} = this.props
+    const {render, children = render, handleSelection, ...props} = this.props
     // TODO: compose together props (rather than overwriting them) like downshift does
     return (
       <Downshift
         {...props}
         stateReducer={this.stateReducer}
-        onChange={this.handleSelection}
+        onChange={handleSelection}
         selectedItem={null}
       >
         {downshift => children(this.getStateAndHelpers(downshift))}
@@ -243,31 +208,35 @@ const TextInput = styled.input`
 `
 
 const MultiSelectField = props => {
-  const { choices } = props.field
+  const [selectedItems, setSelectedItems] = useState([])
+  const { field, setInputValue } = props
+  const { id, choices } = field
   const input = React.createRef()
+  const itemToString = item => (item ? item.name : '')
 
   const getItems = filter => {
     return filter
-      ? matchSorter(choices, filter, {
-          keys: ['text'],
-        })
+      ? matchSorter(choices, filter, { keys: ['text'] })
       : choices
   }
 
-  const itemToString = item => (item ? item.name : '')
-
-  const handleChange = selectedItems => {
-    const values = selectedItems.map(item => item.value)
-    console.log({selectedItems})
-    // @TODO:
-    //this.props.setInputValue(this.props.field.id, values)
+  const handleSelection = item => {
+    const newSelectedItems = selectedItems.includes(item) ? removeItem(item) : addItem(item)
+    setSelectedItems(newSelectedItems)
+    setInputValue(id, newSelectedItems.map(item => item.value))
   }
+
+  const removeItem = item => selectedItems.filter(i => i !== item)
+
+  const addItem = item => [...selectedItems, item]
 
   return (
     <MultiDownshiftContainer>
       <h1 style={{textAlign: 'center'}}>Multi-selection example</h1>
       <MultiDownshift
-        onChange={handleChange}
+        selectedItems={selectedItems}
+        handleSelection={handleSelection}
+        removeItem={removeItem}
         itemToString={itemToString}
       >
         {({
