@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Downshift from 'downshift'
 import matchSorter from 'match-sorter'
 import styled from 'styled-components'
@@ -177,187 +177,182 @@ class MultiDownshift extends React.Component {
   }
 }
 
-class MultiSelectField extends React.Component {
-  input = React.createRef()
+const MultiDownshiftContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+`
 
-  itemToString = item => (item ? item.name : '')
+const Dropdown = styled.div`
+  cursor: pointer;
+  position: relative;
+  border-radius: 6px;
+  border-bottom-right-radius: ${props => (props.isOpen ? '0' : '6px')};
+  border-bottom-left-radius: ${props => (props.isOpen ? '0' : '6px')};
+  padding: 10px;
+  padding-right: 50px;
+  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
+  border-color: #96c8da;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-style: solid;
+`
 
-  handleChange = selectedItems => {
+const TextInputContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+`
+
+const SelectedPill = styled.div`
+  margin: 2px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 8px;
+  padding-right: 8px;
+  display: inline-block;
+  word-wrap: none;
+  background-color: #ccc;
+  border-radius: 2px;
+`
+
+const SelectedPillContentWrap = styled.div`
+  display: grid;
+  grid-gap: 6px;
+  grid-auto-flow: column;
+  align-items: center;
+`
+
+const SelectedPillX = styled.button`
+  cursor: pointer;
+  line-height: 0.8;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  font-size: 16px;
+`
+
+const TextInput = styled.input`
+  border: none;
+  margin-left: 6px;
+  flex: 1;
+  font-size: 14px;
+  min-height: 27px;
+`
+
+const MultiSelectField = props => {
+  const { choices } = props.field
+  const input = React.createRef()
+
+  const getItems = filter => {
+    return filter
+      ? matchSorter(choices, filter, {
+          keys: ['text'],
+        })
+      : choices
+  }
+
+  const itemToString = item => (item ? item.name : '')
+
+  const handleChange = selectedItems => {
     const values = selectedItems.map(item => item.value)
     console.log({selectedItems})
     // @TODO:
     //this.props.setInputValue(this.props.field.id, values)
   }
 
-  render() {
-    console.log('multi-select rendered')
+  return (
+    <MultiDownshiftContainer>
+      <h1 style={{textAlign: 'center'}}>Multi-selection example</h1>
+      <MultiDownshift
+        onChange={handleChange}
+        itemToString={itemToString}
+      >
+        {({
+          getInputProps,
+          getToggleButtonProps,
+          getMenuProps,
+          // note that the getRemoveButtonProps prop getter and the removeItem
+          // action are coming from MultiDownshift composibility for the win!
+          getRemoveButtonProps,
+          removeItem,
 
-    const { choices } = this.props.field
-
-    const MultiDownshiftContainer = styled.div`
-      display: flex;
-      flex-direction: column;
-      margin-top: 50px;
-    `
-
-    const Dropdown = styled.div`
-      cursor: pointer;
-      position: relative;
-      border-radius: 6px;
-      border-bottom-right-radius: ${props => (props.isOpen ? '0' : '6px')};
-      border-bottom-left-radius: ${props => (props.isOpen ? '0' : '6px')};
-      padding: 10px;
-      padding-right: 50px;
-      box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-      border-color: #96c8da;
-      border-top-width: 1px;
-      border-right-width: 1px;
-      border-bottom-width: 1px;
-      border-left-width: 1px;
-      border-style: solid;
-    `
-
-    const TextInputContainer = styled.div`
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-    `
-
-    const SelectedPill = styled.div`
-      margin: 2px;
-      padding-top: 2px;
-      padding-bottom: 2px;
-      padding-left: 8px;
-      padding-right: 8px;
-      display: inline-block;
-      word-wrap: none;
-      background-color: #ccc;
-      border-radius: 2px;
-    `
-
-    const SelectedPillContentWrap = styled.div`
-      display: grid;
-      grid-gap: 6px;
-      grid-auto-flow: column;
-      align-items: center;
-    `
-
-    const SelectedPillX = styled.button`
-      cursor: pointer;
-      line-height: 0.8;
-      border: none;
-      background-color: transparent;
-      padding: 0;
-      font-size: 16px;
-    `
-
-    const TextInput = styled.input`
-      border: none;
-      margin-left: 6px;
-      flex: 1;
-      font-size: 14px;
-      min-height: 27px;
-    `
-
-    const getItems = filter => {
-      return filter
-        ? matchSorter(choices, filter, {
-            keys: ['text'],
-          })
-        : choices
-    }
-
-    return (
-      <MultiDownshiftContainer>
-        <h1 style={{textAlign: 'center'}}>Multi-selection example</h1>
-        <MultiDownshift
-          onChange={this.handleChange}
-          itemToString={this.itemToString}
-        >
-          {({
-            getInputProps,
-            getToggleButtonProps,
-            getMenuProps,
-            // note that the getRemoveButtonProps prop getter and the removeItem
-            // action are coming from MultiDownshift composibility for the win!
-            getRemoveButtonProps,
-            removeItem,
-
-            isOpen,
-            inputValue,
-            selectedItems,
-            getItemProps,
-            highlightedIndex,
-            toggleMenu,
-          }) => (
-            <div style={{width: 500, margin: 'auto', position: 'relative'}}>
-              <Dropdown
-                onClick={() => {
-                  toggleMenu()
-                  !isOpen && this.input.current.focus()
-                }}
-              >
-                <TextInputContainer>
-                  {selectedItems.length > 0 &&
-                    selectedItems.map(item => (
-                      <SelectedPill key={item.value}>
-                        <SelectedPillContentWrap>
-                          <span>{item.text}</span>
-                          <SelectedPillX {...getRemoveButtonProps({item})}>
-                            𝘅
-                          </SelectedPillX>
-                        </SelectedPillContentWrap>
-                      </SelectedPill>
-                    ))}
-                  <TextInput
-                    {...getInputProps({
-                      ref: this.input,
-                      onKeyDown(event) {
-                        if (event.key === 'Backspace' && !inputValue) {
-                          removeItem(selectedItems[selectedItems.length - 1])
-                        }
-                      },
-                    })}
-                    placeholder={
-                      selectedItems.length < 1 ? 'Select a value' : ''
-                    }
-                  />
-                </TextInputContainer>
-                <ControllerButton
-                  {...getToggleButtonProps({
-                    // prevents the menu from immediately toggling
-                    // closed (due to our custom click handler above).
-                    onClick(event) {
-                      event.stopPropagation()
+          isOpen,
+          inputValue,
+          selectedItems,
+          getItemProps,
+          highlightedIndex,
+          toggleMenu,
+        }) => (
+          <div style={{width: 500, margin: 'auto', position: 'relative'}}>
+            <Dropdown
+              onClick={() => {
+                toggleMenu()
+                !isOpen && input.current.focus()
+              }}
+            >
+              <TextInputContainer>
+                {selectedItems.length > 0 &&
+                  selectedItems.map(item => (
+                    <SelectedPill key={item.value}>
+                      <SelectedPillContentWrap>
+                        <span>{item.text}</span>
+                        <SelectedPillX {...getRemoveButtonProps({item})}>
+                          𝘅
+                        </SelectedPillX>
+                      </SelectedPillContentWrap>
+                    </SelectedPill>
+                  ))}
+                <TextInput
+                  {...getInputProps({
+                    ref: input,
+                    onKeyDown(event) {
+                      if (event.key === 'Backspace' && !inputValue) {
+                        removeItem(selectedItems[selectedItems.length - 1])
+                      }
                     },
                   })}
-                >
-                  <ArrowIcon isOpen={isOpen} />
-                </ControllerButton>
-              </Dropdown>
-              <Menu {...getMenuProps({isOpen})}>
-                {isOpen
-                  ? getItems(inputValue).map((item, index) => (
-                      <Item
-                        key={item.value}
-                        {...getItemProps({
-                          item,
-                          index,
-                          isActive: highlightedIndex === index,
-                          isSelected: selectedItems.includes(item),
-                        })}
-                      >
-                        {item.text}
-                      </Item>
-                    ))
-                  : null}
-              </Menu>
-            </div>
-          )}
-        </MultiDownshift>
-      </MultiDownshiftContainer>
-    )
-  }
+                  placeholder={
+                    selectedItems.length < 1 ? 'Select a value' : ''
+                  }
+                />
+              </TextInputContainer>
+              <ControllerButton
+                {...getToggleButtonProps({
+                  // prevents the menu from immediately toggling
+                  // closed (due to our custom click handler above).
+                  onClick(event) {
+                    event.stopPropagation()
+                  },
+                })}
+              >
+                <ArrowIcon isOpen={isOpen} />
+              </ControllerButton>
+            </Dropdown>
+            <Menu {...getMenuProps({isOpen})}>
+              {isOpen
+                ? getItems(inputValue).map((item, index) => (
+                    <Item
+                      key={item.value}
+                      {...getItemProps({
+                        item,
+                        index,
+                        isActive: highlightedIndex === index,
+                        isSelected: selectedItems.includes(item),
+                      })}
+                    >
+                      {item.text}
+                    </Item>
+                  ))
+                : null}
+            </Menu>
+          </div>
+        )}
+      </MultiDownshift>
+    </MultiDownshiftContainer>
+  )
 }
 
 export default MultiSelectField
