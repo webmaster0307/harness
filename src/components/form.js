@@ -36,18 +36,20 @@ const Form = ({form}) => {
 
   const handleSubmit = event => {
       event.preventDefault()
-      console.log('form submitted')
-      console.log('"inputs" values:')
+      console.log('Form submitted. Values:')
       console.log(inputs)
   }
 
   // Fake auto-setting fields for ESFox
-  if (inputs[`input_1`]) {
+  const gravityForm = document.querySelector('.gravity-form')
+  if (gravityForm) {
+    const selects = [...gravityForm.querySelectorAll('select')]
+    const textInputs = [...gravityForm.querySelectorAll('input[type="text"]')]
+
     setTimeout( () => {
-      const form = document.querySelector('form')
-      form.querySelector('input[name="input_2"]').value = inputs[`input_1`]
-      form.querySelector('input[name="input_3"]').value = inputs[`input_1`]
-      form.querySelector('select[name="input_4"]').value = inputs[`input_1`]
+      textInputs[0].value = selects[0].value
+      textInputs[1].value = selects[0].value
+      selects[1].value = selects[0].value
     }, 400 )
   }
 

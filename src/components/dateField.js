@@ -10,9 +10,10 @@ const DateField = ({ formId, field, inputs, setInputValue }) => {
 
     const handleDayClick = dateObject => {
         setDay(dateObject)
-        setInputValue(id, formatDate(dateObject))
+        setInputValue(id, format(dateObject, 'YYYY-MM-DD'))
     }
 
+    // @TODO: Use this when we switch to having both the datepicker and text input displayed.
     const formatDate = dateObject => {
         // Map Gravity Forms date formats to their date-fns equivalents.
         const dateFormatMap = {

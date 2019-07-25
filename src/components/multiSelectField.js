@@ -109,31 +109,30 @@ class MultiDownshift extends React.Component {
         // TODO: use something like downshift's composeEventHandlers utility instead
         onClick && onClick(e)
         e.stopPropagation()
-        this.props.removeItem(item)
+        this.props.handleInputChange(item)
       },
       ...props,
     }
   }
 
   getStateAndHelpers(downshift) {
-    const { selectedItems, removeItem } = this.props
+    const { selectedItems } = this.props
     const { getRemoveButtonProps } = this
     return {
       getRemoveButtonProps,
-      removeItem,
       selectedItems,
       ...downshift,
     }
   }
 
   render() {
-    const {render, children = render, handleSelection, ...props} = this.props
+    const {render, children = render, handleInputChange, ...props} = this.props
     // TODO: compose together props (rather than overwriting them) like downshift does
     return (
       <Downshift
         {...props}
         stateReducer={this.stateReducer}
-        onChange={handleSelection}
+        onChange={handleInputChange}
         selectedItem={null}
       >
         {downshift => children(this.getStateAndHelpers(downshift))}
@@ -220,10 +219,10 @@ const MultiSelectField = props => {
       : choices
   }
 
-  const handleSelection = item => {
+  const handleInputChange = item => {
     const newSelectedItems = selectedItems.includes(item) ? removeItem(item) : addItem(item)
     setSelectedItems(newSelectedItems)
-    setInputValue(id, newSelectedItems.map(item => item.value))
+    setInputValue(id, newSelectedItems.map(item => item.value).join())
   }
 
   const removeItem = item => selectedItems.filter(i => i !== item)
@@ -235,22 +234,16 @@ const MultiSelectField = props => {
       <h1 style={{textAlign: 'center'}}>Multi-selection example</h1>
       <MultiDownshift
         selectedItems={selectedItems}
-        handleSelection={handleSelection}
-        removeItem={removeItem}
+        handleInputChange={handleInputChange}
         itemToString={itemToString}
       >
         {({
           getInputProps,
           getToggleButtonProps,
           getMenuProps,
-          // note that the getRemoveButtonProps prop getter and the removeItem
-          // action are coming from MultiDownshift composibility for the win!
           getRemoveButtonProps,
-          removeItem,
-
           isOpen,
           inputValue,
-          selectedItems,
           getItemProps,
           highlightedIndex,
           toggleMenu,
@@ -279,7 +272,7 @@ const MultiSelectField = props => {
                     ref: input,
                     onKeyDown(event) {
                       if (event.key === 'Backspace' && !inputValue) {
-                        removeItem(selectedItems[selectedItems.length - 1])
+                        handleInputChange(selectedItems[selectedItems.length - 1])
                       }
                     },
                   })}
