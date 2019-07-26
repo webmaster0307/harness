@@ -6,6 +6,15 @@ import "react-day-picker/lib/style.css"
 
 const DayPickerContainer = styled.div`
     text-align: center;
+    .DayPicker {
+        border: 1px solid #ddd;
+        border-radius: ${props => props.theme.borderRadius};
+        background: ${props => props.theme.white};
+    }
+    .DayPicker-Weekdays {
+        border-top: 1px solid #ddd;
+        border-bottom: 1px solid #ddd;
+    }
 `
 
 // Datepicker documentation:
