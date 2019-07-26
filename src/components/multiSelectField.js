@@ -142,26 +142,21 @@ class MultiDownshift extends React.Component {
 }
 
 const MultiDownshiftContainer = styled.div`
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  margin-top: 50px;
+  margin-top: 50px; */
+  background: ${props => props.theme.white};
 `
 
 const Dropdown = styled.div`
   cursor: pointer;
   position: relative;
-  border-radius: 6px;
-  border-bottom-right-radius: ${props => (props.isOpen ? '0' : '6px')};
-  border-bottom-left-radius: ${props => (props.isOpen ? '0' : '6px')};
+  border-radius: ${props => props.theme.borderRadius};
+  border-bottom-right-radius: ${props => props.isOpen ? '0' : props.theme.borderRadius};
+  border-bottom-left-radius: ${props => props.isOpen ? '0' : props.theme.borderRadius};
   padding: 10px;
   padding-right: 50px;
-  box-shadow: 0 2px 3px 0 rgba(34, 36, 38, 0.15);
-  border-color: #96c8da;
-  border-top-width: 1px;
-  border-right-width: 1px;
-  border-bottom-width: 1px;
-  border-left-width: 1px;
-  border-style: solid;
+  border: 1px solid #bebebe;
 `
 
 const TextInputContainer = styled.div`
@@ -172,14 +167,11 @@ const TextInputContainer = styled.div`
 
 const SelectedPill = styled.div`
   margin: 2px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding: 0.5rem 1rem;
   display: inline-block;
   word-wrap: none;
-  background-color: #ccc;
-  border-radius: 2px;
+  background-color: #ddd;
+  border-radius: ${props => props.theme.borderRadius};
 `
 
 const SelectedPillContentWrap = styled.div`
@@ -208,7 +200,7 @@ const TextInput = styled.input`
 
 const MultiSelectField = props => {
   const { field, inputs, setInputValue } = props
-  const { id, choices } = field
+  const { id, choices, description } = field
   const input = React.createRef()
   const itemToString = item => (item ? item.name : '')
 
@@ -236,7 +228,6 @@ const MultiSelectField = props => {
 
   return (
     <MultiDownshiftContainer>
-      <h1 style={{textAlign: 'center'}}>Multi-selection example</h1>
       <MultiDownshift
         selectedItems={selectedItems}
         handleInputChange={handleInputChange}
@@ -253,7 +244,7 @@ const MultiSelectField = props => {
           highlightedIndex,
           toggleMenu,
         }) => (
-          <div style={{width: 500, margin: 'auto', position: 'relative'}}>
+          <div style={{margin: 'auto', position: 'relative'}}>
             <Dropdown
               onClick={() => {
                 toggleMenu()
@@ -282,7 +273,7 @@ const MultiSelectField = props => {
                     },
                   })}
                   placeholder={
-                    selectedItems.length < 1 ? 'Select a value' : ''
+                    selectedItems.length < 1 ? description : ''
                   }
                 />
               </TextInputContainer>

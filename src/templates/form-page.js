@@ -65,6 +65,7 @@ export const formQuery = graphql`
               type
               id
               label
+              description
               choices {
                 text
                 value
