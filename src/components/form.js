@@ -81,7 +81,7 @@ const Form = ({form}) => {
           submitButtonText={submitButtonText}
         >
           {pageGroup.map(field => (
-            <FieldContainer>
+            <FieldContainer key={field.id}>
               <Field
                 key={field.id}
                 field={field}

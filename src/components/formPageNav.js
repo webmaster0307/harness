@@ -41,8 +41,14 @@ const PreviousButton = styled(NavButton)`
 const FormPageNav = ({ pageIndex, totalPages, setVisiblePage }) => {
     const hasPrevPage = () => pageIndex > 0
     const hasNextPage = () => totalPages > pageIndex + 1
-    const goToPreviousPage = () => setVisiblePage(pageIndex - 1)
-    const goToNextPage = () => setVisiblePage(pageIndex + 1)
+    const goToPreviousPage = event => {
+        event.preventDefault()
+        setVisiblePage(pageIndex - 1)
+    }
+    const goToNextPage = event => {
+        event.preventDefault()
+        setVisiblePage(pageIndex + 1)
+    }
 
     return (
         <FormPageNavContainer>
