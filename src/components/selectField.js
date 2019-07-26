@@ -10,7 +10,7 @@ const SelectField = ({ formId, field, inputs, handleInputChange }) => {
         <select
             id={htmlId}
             name={`input_${id}`}
-            value={inputs[`input_${id}`]}
+            value={inputs[id]}
             onChange={event => handleInputChange(id, event)}
             required={isRequired}
         >
