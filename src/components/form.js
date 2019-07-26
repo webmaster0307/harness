@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import styled from "styled-components"
 
 import FormPage from "../components/formPage"
 import Field from "../components/field"
@@ -56,6 +57,12 @@ const Form = ({form}) => {
   const pageGroups = getPageGroups(fields)
   const totalPages = pageGroups.length
 
+  const FieldContainer = styled.div`
+    width: 100%;
+    padding: 1.5rem;
+    border: 1px solid #ddd;
+  `
+
   return (
     <form
       id={`gravity-form-${formId}`}
@@ -74,14 +81,16 @@ const Form = ({form}) => {
           submitButtonText={submitButtonText}
         >
           {pageGroup.map(field => (
-            <Field
-              key={field.id}
-              field={field}
-              formId={formId}
-              inputs={inputs}
-              handleInputChange={handleInputChange}
-              setInputValue={setInputValue}
-            />
+            <FieldContainer>
+              <Field
+                key={field.id}
+                field={field}
+                formId={formId}
+                inputs={inputs}
+                handleInputChange={handleInputChange}
+                setInputValue={setInputValue}
+              />
+            </FieldContainer>
           ))}
         </FormPage>
       ))}
@@ -90,3 +99,21 @@ const Form = ({form}) => {
 }
 
 export default Form
+
+// const CREATE_ENTRY = gql`
+//   mutation createGravityFormsEntry(
+//     $clientMutationId: "123456"
+//     $key: String!
+//     $login: String!
+//     $password: String!
+//   ) {
+//     resetUserPassword(
+//       input: { clientMutationId: $clientMutationId, key: $key, login: $login, password: $password }
+//     ) {
+//       user {
+//         username
+//         email
+//       }
+//     }
+//   }
+// `;

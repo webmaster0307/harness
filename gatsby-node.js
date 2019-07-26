@@ -11,7 +11,7 @@ exports.createPages = ({ graphql, actions }) => {
   const formPage = path.resolve(`./src/templates/form-page.js`)
 
   createPage({
-    path: '/workplace-inspection',
+    path: '/',
     component: formPage,
     context: {
       id: "R3Jhdml0eUZvcm1zRm9ybTo2NQ==" // Form #65, ESFox
