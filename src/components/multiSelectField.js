@@ -207,11 +207,17 @@ const TextInput = styled.input`
 `
 
 const MultiSelectField = props => {
-  const [selectedItems, setSelectedItems] = useState([])
-  const { field, setInputValue } = props
+  const { field, inputs, setInputValue } = props
   const { id, choices } = field
   const input = React.createRef()
   const itemToString = item => (item ? item.name : '')
+
+  const getSelectedItems = () => {
+    const selectedValues = (inputs[id] || '').split(',')
+    return choices.filter(item => selectedValues.includes(item.value))
+  }
+
+  const selectedItems = getSelectedItems()
 
   const getItems = filter => {
     return filter
@@ -221,7 +227,6 @@ const MultiSelectField = props => {
 
   const handleInputChange = item => {
     const newSelectedItems = selectedItems.includes(item) ? removeItem(item) : addItem(item)
-    setSelectedItems(newSelectedItems)
     setInputValue(id, newSelectedItems.map(item => item.value).join())
   }
 

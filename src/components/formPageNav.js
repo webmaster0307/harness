@@ -8,7 +8,7 @@ const FormPageNavContainer = styled.div`
 const NavButton = styled.button`
     width: 100%;
     padding: 0.6rem;
-    border: 1px solid #979797;
+    border: 1px solid #bebebe;
     border-radius: ${props => props.theme.borderRadius};
     text-align: center;
     text-transform: uppercase;

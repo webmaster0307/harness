@@ -21,7 +21,7 @@ const Field = ({ field, formId, inputs, handleInputChange, setInputValue }) => {
         case 'textarea':
             return <TextAreaField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
         case 'multiselect':
-            return <MultiSelectField key={field.id} field={field} setInputValue={setInputValue} />
+            return <MultiSelectField key={field.id} field={field} inputs={inputs} setInputValue={setInputValue} />
         case 'signature':
             return <SignatureField key={field.id} field={field} setInputValue={setInputValue} />
     }
