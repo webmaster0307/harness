@@ -60,7 +60,6 @@ const Form = ({form}) => {
   const FieldContainer = styled.div`
     width: 100%;
     padding: 1.5rem;
-    border: 1px solid #ddd;
   `
 
   return (

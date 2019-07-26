@@ -1,22 +1,33 @@
 import React from 'react'
 import styled from 'styled-components'
 
+const StyledFieldset = styled.fieldset`
+  display: contents;
+`
+
+const StyledLegend = styled.legend`
+  margin-bottom: 1rem;
+`
+
 const RadioButtonsContainer = styled.div`
   display: flex;
+  border-radius: ${props => props.theme.borderRadius};
+  overflow: hidden;
+  border: 1px solid #bebebe;
 `
 
 const RadioButtonContainer = styled.div`
   flex: 1 1 50%;
   background: ${props => props.theme.lightGray};
-  border-radius: ${props => props.theme.borderRadius};
   text-align: center;
   text-transform: uppercase;
   background: ${props => props.checked ? props.theme.lightGray : props.theme.white};
+  border-left: ${props => props.index > 0 ? '1px solid #bebebe' : 0};
 `
 
 const RadioButtonLabel = styled.label`
   margin: 0;
-  padding: 2rem;
+  padding: 1rem 2rem;
 `
 
 const RadioField = ({ formId, field, inputs, handleInputChange }) => {
@@ -32,11 +43,11 @@ const RadioField = ({ formId, field, inputs, handleInputChange }) => {
   }
 
   return (
-    <fieldset>
-        <legend>{label}</legend>
+    <StyledFieldset>
+        <StyledLegend>{label}</StyledLegend>
         <RadioButtonsContainer>
           {choices.map(({text, value}, index) => (
-              <RadioButtonContainer key={value} checked={shouldButtonBeChecked(index, value)}>
+              <RadioButtonContainer key={value} index={index} checked={shouldButtonBeChecked(index, value)}>
                   <input
                       type="radio"
                       id={`choice_${formId}_${id}_${index}`}
@@ -51,7 +62,7 @@ const RadioField = ({ formId, field, inputs, handleInputChange }) => {
               </RadioButtonContainer>
           ))}
         </RadioButtonsContainer>
-    </fieldset>
+    </StyledFieldset>
   )
 }
 
