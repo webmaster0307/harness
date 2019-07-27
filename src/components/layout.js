@@ -92,6 +92,32 @@ const GlobalStyle = createGlobalStyle`
         }
     }
   }
+  button,
+  input[type="submit"] {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #bebebe;
+    border-radius: ${props => props.theme.borderRadius};
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1rem;
+    color: ${props => props.theme.mediumGray};
+    background: ${props => props.theme.lightGray};
+
+    &:hover, &:active {
+        cursor: pointer;
+        background: ${props => props.theme.lightGrayDarkened};
+    }
+
+    &.button-primary {
+      color: ${props => props.theme.white};
+      background: ${props => props.theme.lightGreen};
+
+      &:hover, &:active {
+          background: ${props => props.theme.lightGreenDarkened};
+      }
+    }
+  }
   .screen-reader {
     border: 0 !important;
     clip: rect(1px, 1px, 1px, 1px) !important;
@@ -129,9 +155,7 @@ const Layout = ({ children }) => {
       <div>
         <StyledMain>{children}</StyledMain>
         <footer>
-          © {new Date().getFullYear()}
-          {` `}
-          <a href="https://www.harnessup.com">Harness</a>
+
         </footer>
       </div>
       </>

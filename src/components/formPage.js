@@ -17,7 +17,7 @@ const FormPage = ({pageIndex, visiblePage, totalPages, setVisiblePage, submitBut
       </FormContentContainer>
       <FormPageNav pageIndex={pageIndex} totalPages={totalPages} setVisiblePage={setVisiblePage} />
       {isLastPage(pageIndex) &&
-        <input type="submit" value={submitButtonText} />
+        <input type="submit" className="button-primary" value={submitButtonText} />
       }
     </div>
   )

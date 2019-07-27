@@ -3,7 +3,11 @@ import styled from 'styled-components'
 import SignatureCanvas from 'react-signature-canvas'
 
 const SignatureFieldContainer = styled.div`
-  border: 4px solid #ccc;
+  .signature-canvas {
+    background: ${props => props.theme.white};
+    border: 1px solid #bebebe;
+    border-radius: ${props => props.theme.borderRadius}
+  }
 `
 
 const SignatureField = ({ formId, field, inputs, handleInputChange }) => {
@@ -12,9 +16,10 @@ const SignatureField = ({ formId, field, inputs, handleInputChange }) => {
 
   return (
     <SignatureFieldContainer>
+      <p>{label}</p>
       <SignatureCanvas
         penColor='black'
-        canvasProps={{width: 500, height: 200, className: 'sigCanvas'}}
+        canvasProps={{width: 407, height: 200, className: 'signature-canvas'}}
       />
     </SignatureFieldContainer>
   )

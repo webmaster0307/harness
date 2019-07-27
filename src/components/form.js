@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components"
 
 import FormPage from "../components/formPage"
@@ -42,24 +42,23 @@ const Form = ({form}) => {
   }
 
   // Fake auto-setting fields for ESFox
-  const gravityForm = document.querySelector('.gravity-form')
-  if (gravityForm) {
+  useEffect(() => {
+    const gravityForm = document.querySelector('.gravity-form')
+    if (!gravityForm) return;
     const selects = [...gravityForm.querySelectorAll('select')]
     const textInputs = [...gravityForm.querySelectorAll('input[type="text"]')]
 
-    setTimeout( () => {
-      textInputs[0].value = selects[0].value
-      textInputs[1].value = selects[0].value
-      selects[1].value = selects[0].value
-    }, 400 )
-  }
+    textInputs[0].value = selects[0].value
+    textInputs[1].value = selects[0].value
+    selects[1].value = selects[0].value
+  });
 
   const pageGroups = getPageGroups(fields)
   const totalPages = pageGroups.length
 
   const FieldContainer = styled.div`
     width: 100%;
-    padding: 1.5rem;
+    padding: 1.5rem 0;
   `
 
   return (

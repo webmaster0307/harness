@@ -5,37 +5,37 @@ const FormPageNavContainer = styled.div`
   margin-bottom: 4rem;
 `
 
-const NavButton = styled.button`
-    width: 100%;
-    padding: 0.6rem;
-    border: 1px solid #bebebe;
-    border-radius: ${props => props.theme.borderRadius};
-    text-align: center;
-    text-transform: uppercase;
-    font-size: 1rem;
+// const NavButton = styled.button`
+//     width: 100%;
+//     padding: 0.6rem;
+//     border: 1px solid #bebebe;
+//     border-radius: ${props => props.theme.borderRadius};
+//     text-align: center;
+//     text-transform: uppercase;
+//     font-size: 1rem;
 
-    &:hover, &:active {
-        cursor: pointer;
-    }
-`
+//     &:hover, &:active {
+//         cursor: pointer;
+//     }
+// `
 
-const NextButton = styled(NavButton)`
-    color: ${props => props.theme.white};
-    background: ${props => props.theme.lightGreen};
+// const NextButton = styled(NavButton)`
+//     color: ${props => props.theme.white};
+//     background: ${props => props.theme.lightGreen};
 
-    &:hover, &:active {
-        background: ${props => props.theme.lightGreenDarkened};
-    }
-`
+//     &:hover, &:active {
+//         background: ${props => props.theme.lightGreenDarkened};
+//     }
+// `
 
-const PreviousButton = styled(NavButton)`
+const PreviousButton = styled.button`
     margin-top: 1rem;
-    color: ${props => props.theme.mediumGray};
+    /* color: ${props => props.theme.mediumGray};
     background: ${props => props.theme.lightGray};
 
     &:hover, &:active {
         background: ${props => props.theme.lightGrayDarkened};
-    }
+    } */
 `
 
 const FormPageNav = ({ pageIndex, totalPages, setVisiblePage }) => {
@@ -52,7 +52,7 @@ const FormPageNav = ({ pageIndex, totalPages, setVisiblePage }) => {
 
     return (
         <FormPageNavContainer>
-            {hasNextPage() && <NextButton onClick={goToNextPage}>Next</NextButton>}
+            {hasNextPage() && <button className="button-primary" onClick={goToNextPage}>Next</button>}
             {hasPrevPage() && <PreviousButton onClick={goToPreviousPage}>Previous</PreviousButton>}
         </FormPageNavContainer>
     )
