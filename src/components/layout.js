@@ -138,6 +138,11 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
+const ContentContainer = styled.div`
+  margin-left: 1rem;
+  margin-right: 1rem;
+`
+
 const StyledMain = styled.main`
   max-width: 26rem;
   margin: 0 auto;
@@ -159,12 +164,10 @@ const Layout = ({ children }) => {
       <>
       <Header siteTitle={data.site.siteMetadata.title} />
       <GlobalStyle />
-      <div>
+      <ContentContainer>
         <StyledMain>{children}</StyledMain>
-        <footer>
-
-        </footer>
-      </div>
+        <footer></footer>
+      </ContentContainer>
       </>
     </ThemeProvider>
   )
