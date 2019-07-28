@@ -27,13 +27,13 @@ const DayPickerContents = styled.div`
 // Datepicker documentation:
 // http://react-day-picker.js.org/docs/getting-started
 const DateField = props => {
-    const { field: { id, label }, inputs, setInputValue } = props
+    const { field: { id, label }, value, setInputValue } = props
 
     const handleDayClick = dateObject => {
         setInputValue(id, format(dateObject, 'YYYY-MM-DD'))
     }
 
-    const dateObject = inputs[id] ? new Date(`${inputs[id]} 00:00:00`) : undefined
+    const dateObject = value ? new Date(`${value} 00:00:00`) : undefined
 
     return (
         <DayPickerContainer>

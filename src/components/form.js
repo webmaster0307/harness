@@ -1,11 +1,33 @@
 import React, { useState, useEffect } from "react"
 import styled from "styled-components"
+import gql from 'graphql-tag'
+import { Mutation } from "react-apollo"
 
+import { getUuid } from "../services/utilities"
 import FormPage from "../components/formPage"
 import Field from "../components/field"
 
+const CREATE_ENTRY = gql`
+  mutation createGravityFormsEntry(
+    $clientMutationId: String!
+    $formId: Int!
+    $allTextValues: [EntryTextValueInput]
+  ) {
+    createGravityFormsEntry(input: {
+      clientMutationId: $clientMutationId,
+      formId: $formId,
+      allTextValues: $allTextValues
+    }) {
+      clientMutationId
+      entry {
+        entryId
+      }
+    }
+  }
+`
+
 const Form = ({form}) => {
-  const [inputs, setInputs] = useState({})
+  const [inputs, setInputs] = useState([])
   const [visiblePage, setVisiblePage] = useState(0)
   const { formId, button: { text: submitButtonText} } = form
   const fields = form.fields.nodes
@@ -31,49 +53,45 @@ const Form = ({form}) => {
     setInputValue(name, value)
   }
 
+  const getProjectLocationValue = projectValue => {
+    switch (projectValue) {
+      case '1':
+        return '10325 Willodell Rd, Port Robinson, ON L0S 1K0'
+      case '2':
+        return '1812 Sir Isaac Brock Way, St. Catharines, ON L2S 3A1'
+      case '3':
+        return '300 Parkside Ave, Buffalo, NY 14214'
+      case '4':
+        return '237 Barton St E, Hamilton, ON L8L 2X2'
+      case '5':
+        return '102 E Main St, Welland, ON L3B 3W6, Canada'
+      default:
+        return ''
+    }
+  }
+
   const setInputValue = (id, value) => {
-    setInputs(inputs => ({...inputs, [id]: value}))
-  }
+    const otherInputs = inputs.filter(input => input.id !== id)
 
-  const handleSubmit = event => {
-      event.preventDefault()
-      console.log('Form submitted. Values:')
-      console.log(inputs)
-  }
+    let newInputValues = [...otherInputs, { id: Number( id ), value }]
+    
+    // Fake auto-setting fields for ESFox
+    if (id == 1) {
+      // Project Numher
+      newInputValues = newInputValues.filter(input => input.id !== 2)
+      newInputValues.push({ id: 2, value: String( value * 2683 ) })
 
-  // Fake auto-setting fields for ESFox
-  useEffect(() => {
-    const gravityForm = document.querySelector('.gravity-form')
-    if (!gravityForm) return;
-    const selects = [...gravityForm.querySelectorAll('select')]
-    const textInputs = [...gravityForm.querySelectorAll('input[type="text"]')]
+      // Project Location
+      newInputValues = newInputValues.filter(input => input.id !== 3)
+      newInputValues.push({ id: 3, value: getProjectLocationValue(value)})
 
-    // Project Number
-    textInputs[0].value = selects[0].value ? selects[0].value * 2683 : ''
-
-    // Project Manager
-    selects[1].value = selects[0].value
-
-    const getProjectLocationValue = projectValue => {
-      switch (projectValue) {
-        case '1':
-          return '10325 Willodell Rd, Port Robinson, ON L0S 1K0'
-        case '2':
-          return '1812 Sir Isaac Brock Way, St. Catharines, ON L2S 3A1'
-        case '3':
-          return '300 Parkside Ave, Buffalo, NY 14214'
-        case '4':
-          return '237 Barton St E, Hamilton, ON L8L 2X2'
-        case '5':
-          return '102 E Main St, Welland, ON L3B 3W6, Canada'
-        default:
-          return ''
-      }
+       // Project Manager
+      newInputValues = newInputValues.filter(input => input.id !== 4)
+      newInputValues.push({ id: 4, value })
     }
 
-    // Project Location
-    textInputs[1].value = selects[0].value ? getProjectLocationValue(selects[0].value) : ''
-  });
+    setInputs(newInputValues)
+  }
 
   const pageGroups = getPageGroups(fields)
   const totalPages = pageGroups.length
@@ -84,55 +102,51 @@ const Form = ({form}) => {
   `
 
   return (
-    <form
-      id={`gravity-form-${formId}`}
-      className="gravity-form"
-      method="post"
-      encType="multipart/form-data"
-      onSubmit={handleSubmit}
-    >
-      {pageGroups.map((pageGroup, pageIndex) => (
-        <FormPage
-          key={pageIndex}
-          pageIndex={pageIndex}
-          visiblePage={visiblePage}
-          totalPages={totalPages}
-          setVisiblePage={setVisiblePage}
-          submitButtonText={submitButtonText}
+    <Mutation mutation={CREATE_ENTRY}>
+      {(createGravityFormsEntry, { loading, error }) => (
+        <form
+          id={`gravity-form-${formId}`}
+          className="gravity-form"
+          method="post"
+          encType="multipart/form-data"
+          onSubmit={e => {
+            e.preventDefault()
+            console.log(inputs)
+            createGravityFormsEntry({ variables: {
+              clientMutationId: getUuid(),
+              formId,
+              allTextValues: inputs,
+            } });
+          }}
         >
-          {pageGroup.map(field => (
-            <FieldContainer key={field.id}>
-              <Field
-                field={field}
-                formId={formId}
-                inputs={inputs}
-                handleInputChange={handleInputChange}
-                setInputValue={setInputValue}
-              />
-            </FieldContainer>
+          {pageGroups.map((pageGroup, pageIndex) => (
+            <FormPage
+              key={pageIndex}
+              pageIndex={pageIndex}
+              visiblePage={visiblePage}
+              totalPages={totalPages}
+              setVisiblePage={setVisiblePage}
+              submitButtonText={submitButtonText}
+            >
+              {pageGroup.map(field => (
+                <FieldContainer key={field.id}>
+                  <Field
+                    field={field}
+                    formId={formId}
+                    inputs={inputs}
+                    handleInputChange={handleInputChange}
+                    setInputValue={setInputValue}
+                  />
+                </FieldContainer>
+              ))}
+            </FormPage>
           ))}
-        </FormPage>
-      ))}
-    </form>
+          {loading && <p>Loading...</p>}
+          {error && <p>Error :( Please try again</p>}
+        </form>
+      )}
+    </Mutation>
   )
 }
 
 export default Form
-
-// const CREATE_ENTRY = gql`
-//   mutation createGravityFormsEntry(
-//     $clientMutationId: "123456"
-//     $key: String!
-//     $login: String!
-//     $password: String!
-//   ) {
-//     resetUserPassword(
-//       input: { clientMutationId: $clientMutationId, key: $key, login: $login, password: $password }
-//     ) {
-//       user {
-//         username
-//         email
-//       }
-//     }
-//   }
-// `;

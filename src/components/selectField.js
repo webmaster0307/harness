@@ -5,7 +5,7 @@ const StyledSelect = styled.select`
     ${props => props.readOnly && `background-color: #ddd;`}
 `
 
-const SelectField = ({ formId, field, inputs, handleInputChange, isReadOnly }) => {
+const SelectField = ({ formId, field, value, handleInputChange, isReadOnly }) => {
   const { id, label, isRequired, choices } = field
   const htmlId = `input_${formId}_${id}`
 
@@ -15,7 +15,7 @@ const SelectField = ({ formId, field, inputs, handleInputChange, isReadOnly }) =
         <StyledSelect
             id={htmlId}
             name={id}
-            value={inputs[id]}
+            value={value}
             onChange={handleInputChange}
             required={isRequired}
             readOnly={isReadOnly(field) ? 'readonly' : null}

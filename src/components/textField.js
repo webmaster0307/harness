@@ -5,7 +5,7 @@ const StyledTextInput = styled.input`
     ${props => props.readOnly && `background-color: #ddd;`}
 `
 
-const TextField = ({ formId, field, inputs, handleInputChange, isReadOnly }) => {
+const TextField = ({ formId, field, value, handleInputChange, isReadOnly }) => {
     const { id, label, cssClass, isRequired } = field
     const htmlId = `input_${formId}_${id}`;
 
@@ -16,7 +16,7 @@ const TextField = ({ formId, field, inputs, handleInputChange, isReadOnly }) => 
                 type="text"
                 id={htmlId}
                 name={id}
-                value={inputs[id]}
+                value={value}
                 onChange={handleInputChange}
                 required={isRequired}
                 readOnly={isReadOnly(field) ? 'readonly' : null}

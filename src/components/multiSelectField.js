@@ -196,13 +196,13 @@ const TextInput = styled.input`
 `
 
 const MultiSelectField = props => {
-  const { field, inputs, setInputValue } = props
+  const { field, value, setInputValue } = props
   const { id, choices, description } = field
   const input = React.createRef()
   const itemToString = item => (item ? item.name : '')
 
   const getSelectedItems = () => {
-    const selectedValues = (inputs[id] || '').split(',')
+    const selectedValues = value.split(',')
     return choices.filter(item => selectedValues.includes(item.value))
   }
 

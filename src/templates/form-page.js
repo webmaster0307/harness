@@ -7,7 +7,6 @@ import Form from "../components/form"
 
 const FormPage = props => {
   const form = props.data.wpgraphql.gravityFormsForm
-  console.log(form)
   const { title } = form
 
   return (
