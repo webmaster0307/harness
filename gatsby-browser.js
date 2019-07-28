@@ -6,13 +6,8 @@
 
 import React from 'react'
 import { ApolloProvider } from 'react-apollo'
-import ApolloClient from 'apollo-boost'
+import { client } from './src/services/apollo'
 
-const client = new ApolloClient({
-  uri: 'http://192.241.255.182/graphql',
-})
-
-// Add Apollo Client as a provider.
 export const wrapRootElement = ({ element }) => (
   <ApolloProvider client={client}>{element}</ApolloProvider>
-)
+);
