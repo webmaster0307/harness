@@ -33,12 +33,14 @@ export const formQuery = graphql`
               type
               id
               label
+              cssClass
               isRequired
             }
             ... on WPGraphQL_SelectField {
               type
               id
               label
+              cssClass
               isRequired
               choices {
                 text

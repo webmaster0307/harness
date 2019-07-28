@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 
 import DateField from "../components/dateField"
 import MultiSelectField from "./multiSelectField"
@@ -9,15 +9,17 @@ import TextField from "../components/textField"
 import TextAreaField from "../components/textAreaField"
 
 const Field = ({ field, formId, inputs, handleInputChange, setInputValue }) => {
+    const isReadOnly = field => field.cssClass.split(' ').includes('readonly')
+
     switch (field.type) {
         case 'date':
             return <DateField key={field.id} formId={formId} field={field} inputs={inputs} setInputValue={setInputValue} />
         case 'radio':
             return <RadioField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
         case 'select':
-            return <SelectField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
+            return <SelectField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} isReadOnly={isReadOnly} />
         case 'text':
-            return <TextField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
+            return <TextField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} isReadOnly={isReadOnly} />
         case 'textarea':
             return <TextAreaField key={field.id} formId={formId} field={field} inputs={inputs} handleInputChange={handleInputChange} />
         case 'multiselect':

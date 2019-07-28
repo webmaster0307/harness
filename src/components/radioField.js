@@ -28,6 +28,7 @@ const RadioButtonContainer = styled.div`
 const RadioButtonLabel = styled.label`
   margin: 0;
   padding: 1rem 2rem;
+  cursor: pointer;
 `
 
 const RadioField = ({ formId, field, inputs, handleInputChange }) => {

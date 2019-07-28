@@ -14,15 +14,7 @@ exports.createPages = ({ graphql, actions }) => {
     path: '/',
     component: formPage,
     context: {
-      id: "R3Jhdml0eUZvcm1zRm9ybTo2NQ==" // Form #65, ESFox
-    }
-  })
-
-  createPage({
-    path: '/form-2',
-    component: formPage,
-    context: {
-      id: "Z3Jhdml0eWZvcm1zZm9ybToy" // Form #2
+      id: "R3Jhdml0eUZvcm1zRm9ybTo0" // Form #4, ESFox Workplace Inspection
     }
   })
 }

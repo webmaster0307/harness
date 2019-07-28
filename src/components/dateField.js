@@ -6,6 +6,13 @@ import "react-day-picker/lib/style.css"
 
 const DayPickerContainer = styled.div`
     text-align: center;
+`
+
+const DayPickerContents = styled.div`
+    display: inline-block;
+    > p {
+        text-align: left;
+    }
     .DayPicker {
         border: 1px solid #ddd;
         border-radius: ${props => props.theme.borderRadius};
@@ -20,7 +27,7 @@ const DayPickerContainer = styled.div`
 // Datepicker documentation:
 // http://react-day-picker.js.org/docs/getting-started
 const DateField = props => {
-    const { field: { id }, inputs, setInputValue } = props
+    const { field: { id, label }, inputs, setInputValue } = props
 
     const handleDayClick = dateObject => {
         setInputValue(id, format(dateObject, 'YYYY-MM-DD'))
@@ -30,7 +37,10 @@ const DateField = props => {
 
     return (
         <DayPickerContainer>
-            <DayPicker onDayClick={handleDayClick} selectedDays={dateObject} />
+            <DayPickerContents>
+                <p>{label}</p>
+                <DayPicker onDayClick={handleDayClick} selectedDays={dateObject} />
+            </DayPickerContents>
         </DayPickerContainer>
     )
 }

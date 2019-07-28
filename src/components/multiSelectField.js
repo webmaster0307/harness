@@ -142,9 +142,6 @@ class MultiDownshift extends React.Component {
 }
 
 const MultiDownshiftContainer = styled.div`
-  /* display: flex;
-  flex-direction: column;
-  margin-top: 50px; */
   background: ${props => props.theme.white};
 `
 
