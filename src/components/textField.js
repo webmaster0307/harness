@@ -15,9 +15,9 @@ const TextField = ({ formId, field, inputs, handleInputChange, isReadOnly }) => 
             <StyledTextInput
                 type="text"
                 id={htmlId}
-                name={`input_${id}`}
+                name={id}
                 value={inputs[id]}
-                onChange={event => handleInputChange(id, event)}
+                onChange={handleInputChange}
                 required={isRequired}
                 readOnly={isReadOnly(field) ? 'readonly' : null}
             />

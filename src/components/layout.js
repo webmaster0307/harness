@@ -51,6 +51,13 @@ const GlobalStyle = createGlobalStyle`
       border-radius: ${theme.borderRadius};
       border: 1px solid #aaa;
     }
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      resize: none;
+      border: 1px solid #aaa;
+      border-radius: ${theme.borderRadius};
+    }
     select {
       display: block;
       font-size: 16px;

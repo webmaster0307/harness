@@ -5,37 +5,8 @@ const FormPageNavContainer = styled.div`
   margin-bottom: 4rem;
 `
 
-// const NavButton = styled.button`
-//     width: 100%;
-//     padding: 0.6rem;
-//     border: 1px solid #bebebe;
-//     border-radius: ${props => props.theme.borderRadius};
-//     text-align: center;
-//     text-transform: uppercase;
-//     font-size: 1rem;
-
-//     &:hover, &:active {
-//         cursor: pointer;
-//     }
-// `
-
-// const NextButton = styled(NavButton)`
-//     color: ${props => props.theme.white};
-//     background: ${props => props.theme.lightGreen};
-
-//     &:hover, &:active {
-//         background: ${props => props.theme.lightGreenDarkened};
-//     }
-// `
-
 const PreviousButton = styled.button`
     margin-top: 1rem;
-    /* color: ${props => props.theme.mediumGray};
-    background: ${props => props.theme.lightGray};
-
-    &:hover, &:active {
-        background: ${props => props.theme.lightGrayDarkened};
-    } */
 `
 
 const FormPageNav = ({ pageIndex, totalPages, setVisiblePage }) => {

@@ -14,9 +14,9 @@ const SelectField = ({ formId, field, inputs, handleInputChange, isReadOnly }) =
         <label htmlFor={htmlId}>{label}</label>
         <StyledSelect
             id={htmlId}
-            name={`input_${id}`}
+            name={id}
             value={inputs[id]}
-            onChange={event => handleInputChange(id, event)}
+            onChange={handleInputChange}
             required={isRequired}
             readOnly={isReadOnly(field) ? 'readonly' : null}
         >

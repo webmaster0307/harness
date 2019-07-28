@@ -53,9 +53,9 @@ const RadioField = ({ formId, field, inputs, handleInputChange }) => {
                       type="radio"
                       id={`choice_${formId}_${id}_${index}`}
                       className="screen-reader"
-                      name={`input_${id}`}
+                      name={id}
                       value={value}
-                      onChange={event => handleInputChange(id, event)}
+                      onChange={handleInputChange}
                       required={isRequired}
                       checked={shouldButtonBeChecked(index, value) ? 'checked' : ''}
                   />

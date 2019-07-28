@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TextAreaField = ({ formId, field, inputs, handleInputChange }) => {
+const TextAreaField = ({ formId, field, value, handleInputChange }) => {
     const { id, label, isRequired } = field
     const htmlId = `input_${formId}_${id}`;
 
@@ -9,9 +9,9 @@ const TextAreaField = ({ formId, field, inputs, handleInputChange }) => {
             <label htmlFor={htmlId}>{label}</label>
             <textarea
                 id={htmlId}
-                name={`input_${id}`}
-                value={inputs[id]}
-                onChange={event => handleInputChange(id, event)}
+                name={id}
+                value={value}
+                onChange={handleInputChange}
                 required={isRequired}
             />
         </>

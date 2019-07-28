@@ -7,6 +7,7 @@ import Form from "../components/form"
 
 const FormPage = props => {
   const form = props.data.wpgraphql.gravityFormsForm
+  console.log(form)
   const { title } = form
 
   return (
@@ -26,37 +27,9 @@ export const formQuery = graphql`
         id
         formId
         title
-        fields(first: 200) {
+        fields(first: 500) {
           nodes {
             __typename
-            ... on WPGraphQL_TextField {
-              type
-              id
-              label
-              cssClass
-              isRequired
-            }
-            ... on WPGraphQL_SelectField {
-              type
-              id
-              label
-              cssClass
-              isRequired
-              choices {
-                text
-                value
-              }            
-            }
-            ... on WPGraphQL_RadioField {
-              type
-              id
-              label
-              isRequired
-              choices {
-                text
-                value
-              }
-            }
             ... on WPGraphQL_DateField {
               type
               id
@@ -78,15 +51,51 @@ export const formQuery = graphql`
               id
               label
             }
+            ... on WPGraphQL_RadioField {
+              type
+              id
+              label
+              isRequired
+              choices {
+                text
+                value
+              }
+            }
             ... on WPGraphQL_SectionField {
               type
               id
               label
+              description
+            }
+            ... on WPGraphQL_SelectField {
+              type
+              id
+              label
+              cssClass
+              isRequired
+              choices {
+                text
+                value
+              }            
             }
             ... on WPGraphQL_SignatureField {
               type
               id
               label
+            }
+            ... on WPGraphQL_TextAreaField {
+              type
+              id
+              label
+              cssClass
+              isRequired
+            }
+            ... on WPGraphQL_TextField {
+              type
+              id
+              label
+              cssClass
+              isRequired
             }
           }
         }

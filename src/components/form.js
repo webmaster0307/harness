@@ -26,9 +26,9 @@ const Form = ({form}) => {
     return pageGroups
   }
 
-  const handleInputChange = (id, event) => {
-    const { value } = event.target
-    setInputValue(id, value)
+  const handleInputChange = event => {
+    const { name, value } = event.target
+    setInputValue(name, value)
   }
 
   const setInputValue = (id, value) => {
@@ -48,9 +48,31 @@ const Form = ({form}) => {
     const selects = [...gravityForm.querySelectorAll('select')]
     const textInputs = [...gravityForm.querySelectorAll('input[type="text"]')]
 
-    textInputs[0].value = selects[0].value
-    textInputs[1].value = selects[0].value
+    // Project Number
+    textInputs[0].value = selects[0].value ? selects[0].value * 2683 : ''
+
+    // Project Manager
     selects[1].value = selects[0].value
+
+    const getProjectLocationValue = projectValue => {
+      switch (projectValue) {
+        case '1':
+          return '10325 Willodell Rd, Port Robinson, ON L0S 1K0'
+        case '2':
+          return '1812 Sir Isaac Brock Way, St. Catharines, ON L2S 3A1'
+        case '3':
+          return '300 Parkside Ave, Buffalo, NY 14214'
+        case '4':
+          return '237 Barton St E, Hamilton, ON L8L 2X2'
+        case '5':
+          return '102 E Main St, Welland, ON L3B 3W6, Canada'
+        default:
+          return ''
+      }
+    }
+
+    // Project Location
+    textInputs[1].value = selects[0].value ? getProjectLocationValue(selects[0].value) : ''
   });
 
   const pageGroups = getPageGroups(fields)
@@ -81,7 +103,6 @@ const Form = ({form}) => {
           {pageGroup.map(field => (
             <FieldContainer key={field.id}>
               <Field
-                key={field.id}
                 field={field}
                 formId={formId}
                 inputs={inputs}

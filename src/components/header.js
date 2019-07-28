@@ -31,7 +31,10 @@ const HamburgerIconContainer = styled(IconContainer)`
 `
 
 const StyledHeading = styled.h1`
-  display: block;
+  display: none;
+  @media (min-width: 515px) {
+    display: block;
+  }
   flex: 10;
   margin: 0;
   text-align: center;

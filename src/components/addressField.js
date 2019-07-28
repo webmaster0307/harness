@@ -11,8 +11,13 @@ const AddressField = props => {
         if (input.isHidden) return;
         return (
           <>
-            <input type="text" id={htmlId} name={`input_${id}`} required={isRequired} />
             <label htmlFor={htmlId}>{label}</label>
+            <input
+              type="text"
+              id={htmlId}
+              name={id}
+              required={isRequired}
+            />
           </>
         );
       })}

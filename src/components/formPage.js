@@ -7,17 +7,21 @@ const FormContentContainer = styled.div`
   margin-bottom: 4rem;
 `
 
+const SubmitButton = styled.input`
+  margin-bottom: 4rem;
+`
+
 const FormPage = ({pageIndex, visiblePage, totalPages, setVisiblePage, submitButtonText, children}) => {
   const isLastPage = pageIndex => totalPages === pageIndex + 1
 
   return (
-    <div className="page" style={{display: pageIndex === visiblePage ? 'block' : 'none'}}>
+    <div className="page" style={{display: pageIndex === visiblePage ? 'block' : 'block'}}>
       <FormContentContainer>
         {children}
       </FormContentContainer>
       <FormPageNav pageIndex={pageIndex} totalPages={totalPages} setVisiblePage={setVisiblePage} />
       {isLastPage(pageIndex) &&
-        <input type="submit" className="button-primary" value={submitButtonText} />
+        <SubmitButton type="submit" className="button-primary" value={submitButtonText} />
       }
     </div>
   )
