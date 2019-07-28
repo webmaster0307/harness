@@ -9,7 +9,7 @@ import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
 
 const client = new ApolloClient({
-  uri: 'http://wpgraphql-gf.local/graphql',
+  uri: 'http://192.241.255.182/graphql',
 })
 
 // Add Apollo Client as a provider.

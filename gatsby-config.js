@@ -13,7 +13,7 @@ module.exports = {
         // This is field under which it's accessible
         fieldName: `wpgraphql`,
         // Url to query from
-        url: `http://wpgraphql-gf.local/graphql`,
+        url: `http://192.241.255.182/graphql`,
       },
     },
     `gatsby-plugin-react-helmet`,
