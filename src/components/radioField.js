@@ -34,21 +34,12 @@ const RadioButtonLabel = styled.label`
 const RadioField = ({ formId, field, value, handleInputChange }) => {
   const { id, label, isRequired, choices } = field
 
-  const shouldButtonBeChecked = (index, buttonValue) => {
-    // If this is the first radio button and no value has been saved yet.
-    if (index === 0 && !value) {
-      return true;
-    }
-
-    return value === buttonValue
-  }
-
   return (
     <StyledFieldset>
         <StyledLegend>{label}</StyledLegend>
         <RadioButtonsContainer>
           {choices.map(({text, value: buttonValue}, index) => (
-              <RadioButtonContainer key={index} index={index} checked={shouldButtonBeChecked(index, buttonValue)}>
+              <RadioButtonContainer key={index} index={index} checked={value === buttonValue}>
                   <input
                       type="radio"
                       id={`choice_${formId}_${id}_${index}`}
@@ -57,7 +48,7 @@ const RadioField = ({ formId, field, value, handleInputChange }) => {
                       value={buttonValue}
                       onChange={handleInputChange}
                       required={isRequired}
-                      checked={shouldButtonBeChecked(index, buttonValue) ? 'checked' : ''}
+                      checked={value === buttonValue ? 'checked' : ''}
                   />
                   <RadioButtonLabel htmlFor={`choice_${formId}_${id}_${index}`}>{text}</RadioButtonLabel>
               </RadioButtonContainer>

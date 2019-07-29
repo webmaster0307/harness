@@ -50,7 +50,7 @@ const Form = ({form}) => {
 
   const handleInputChange = event => {
     const { name, value } = event.target
-    setInputValue(name, value)
+    setInputValue( Number(name), value)
   }
 
   const getProjectLocationValue = projectValue => {
@@ -73,7 +73,7 @@ const Form = ({form}) => {
   const setInputValue = (id, value) => {
     const otherInputs = inputs.filter(input => input.id !== id)
 
-    let newInputValues = [...otherInputs, { id: Number( id ), value }]
+    let newInputValues = [...otherInputs, { id, value }]
     
     // Fake auto-setting fields for ESFox
     if (id == 1) {
