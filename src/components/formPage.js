@@ -35,7 +35,6 @@ const FormPage = props => {
     return (
         <>
           <FormContentContainer>
-            <h2>{`This is page ${visiblePage}`}</h2>
             {pageGroup.map(field => (
                 <FieldContainer key={field.id}>
                     <Field
