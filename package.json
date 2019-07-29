@@ -1,9 +1,9 @@
 {
-  "name": "gatsby-starter-default",
+  "name": "harness-software",
   "private": true,
-  "description": "A simple starter to get up and developing quickly with Gatsby",
+  "description": "Harness Software",
   "version": "0.1.0",
-  "author": "Kyle Mathews <mathews.kyle@gmail.com>",
+  "author": "Kellen Mace <kellen@harnessup.com>",
   "dependencies": {
     "apollo-boost": "^0.4.3",
     "babel-plugin-styled-components": "^1.10.6",
@@ -22,6 +22,7 @@
     "graphql": "^14.4.2",
     "graphql-tag": "^2.10.1",
     "isomorphic-unfetch": "^3.0.0",
+    "lodash": "^4.17.15",
     "match-sorter": "^4.0.0",
     "normalize.css": "^8.0.1",
     "prop-types": "^15.7.2",
