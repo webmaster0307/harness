@@ -19,6 +19,7 @@ const SignatureField = ({ formId, field, inputs, handleInputChange }) => {
 
   // Set canvas width to match its parent's width.
   const handleResize = () => {
+    if (!canvasParentEl || !canvasParentEl.current) return;
     const parentWidth = canvasParentEl.current.offsetWidth
     canvasEl.current.getCanvas().setAttribute("width", parentWidth)
   }
