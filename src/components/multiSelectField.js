@@ -151,8 +151,7 @@ const Dropdown = styled.div`
   border-radius: ${props => props.theme.borderRadius};
   border-bottom-right-radius: ${props => props.isOpen ? '0' : props.theme.borderRadius};
   border-bottom-left-radius: ${props => props.isOpen ? '0' : props.theme.borderRadius};
-  padding: 10px;
-  padding-right: 50px;
+  padding: 1.1rem 2.5rem 1.1rem 1.1rem;
   border: 1px solid #bebebe;
 `
 

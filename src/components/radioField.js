@@ -27,7 +27,7 @@ const RadioButtonContainer = styled.div`
 
 const RadioButtonLabel = styled.label`
   margin: 0;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   cursor: pointer;
 `
 
