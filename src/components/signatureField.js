@@ -19,7 +19,7 @@ const SignatureField = ({ formId, field, inputs, handleInputChange }) => {
 
   // Set canvas width to match its parent's width.
   const handleResize = () => {
-    if (!canvasParentEl || !canvasParentEl.current) return;
+    if (!canvasParentEl || !canvasParentEl.current) return
     const parentWidth = canvasParentEl.current.offsetWidth
     canvasEl.current.getCanvas().setAttribute("width", parentWidth)
   }
@@ -40,7 +40,7 @@ const SignatureField = ({ formId, field, inputs, handleInputChange }) => {
       <SignatureCanvas
         ref={canvasEl}
         penColor='black'
-        canvasProps={{height: 200, className: 'signature-canvas'}}
+        canvasProps={{width: 407, height: 200, className: 'signature-canvas'}}
       />
     </SignatureFieldContainer>
   )
