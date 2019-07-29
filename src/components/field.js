@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 
 import DateField from "../components/dateField"
 import MultiSelectField from "./multiSelectField"
@@ -18,23 +18,86 @@ const Field = ({ field, formId, inputs, handleInputChange, setInputValue }) => {
 
     switch (field.type) {
         case 'date':
-            return <DateField key={field.id} formId={formId} field={field} value={getStringValue(field.id)} setInputValue={setInputValue} />
+            return (
+                <DateField
+                    key={field.id}
+                    formId={formId}
+                    field={field}
+                    value={getStringValue(field.id)}
+                    setInputValue={setInputValue}
+                />
+            )
         case 'radio':
-            return <RadioField key={field.id} formId={formId} field={field} value={getStringValue(field.id)} handleInputChange={handleInputChange} />
+            return (
+                <RadioField
+                    key={field.id}
+                    formId={formId}
+                    field={field}
+                    value={getStringValue(field.id)}
+                    handleInputChange={handleInputChange}
+                />
+            )
         case 'section':
-            return <SectionField key={field.id} formId={formId} field={field} />
+            return (
+                <SectionField
+                    key={field.id}
+                    formId={formId}
+                    field={field}
+                />
+            )
         case 'select':
-            return <SelectField key={field.id} formId={formId} field={field} value={getStringValue(field.id)} handleInputChange={handleInputChange} isReadOnly={isReadOnly} />
+            return (
+                <SelectField
+                    key={field.id}
+                    formId={formId}
+                    field={field}
+                    value={getStringValue(field.id)}
+                    handleInputChange={handleInputChange}
+                    isReadOnly={isReadOnly}
+                />
+            )
         case 'text':
-            return <TextField key={field.id} formId={formId} field={field} value={getStringValue(field.id)} handleInputChange={handleInputChange} isReadOnly={isReadOnly} />
+            return (
+                <TextField
+                key={field.id}
+                formId={formId}
+                field={field}
+                value={getStringValue(field.id)}
+                handleInputChange={handleInputChange}
+                isReadOnly={isReadOnly}
+                />
+            )
         case 'textarea':
-            return <TextAreaField key={field.id} formId={formId} field={field} value={getStringValue(field.id)} handleInputChange={handleInputChange} />
+            return (
+                <TextAreaField
+                    key={field.id}
+                    formId={formId}
+                    field={field}
+                    value={getStringValue(field.id)}
+                    handleInputChange={handleInputChange}
+                />
+            )
         case 'multiselect':
-            return <MultiSelectField key={field.id} field={field} value={getStringValue(field.id)} setInputValue={setInputValue} />
+            return (
+                <MultiSelectField
+                    key={field.id}
+                    field={field}
+                    value={getStringValue(field.id)}
+                    setInputValue={setInputValue}
+                />
+            )
         case 'signature':
-            return <SignatureField key={field.id} field={field} setInputValue={setInputValue} />
+            return (
+                <SignatureField
+                    key={field.id}
+                    field={field}
+                    setInputValue={setInputValue}
+                />
+            )
         default:
-            return <p key={Math.random()}>{field.type}</p>
+            return (
+                <p key={Math.random()}>{field.type}</p>
+            )
     }
 }
 

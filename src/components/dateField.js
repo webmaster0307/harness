@@ -39,7 +39,11 @@ const DateField = props => {
         <DayPickerContainer>
             <DayPickerContents>
                 <p>{label}</p>
-                <DayPicker onDayClick={handleDayClick} selectedDays={dateObject} />
+                <DayPicker
+                    onDayClick={handleDayClick}
+                    selectedDays={dateObject}
+                    month={dateObject}
+                />
             </DayPickerContents>
         </DayPickerContainer>
     )

@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from "react"
-import styled from "styled-components"
+import React, { useState } from "react"
 import gql from 'graphql-tag'
 import { Mutation } from "react-apollo"
 
 import { getUuid } from "../services/utilities"
-import FormPage from "../components/formPage"
-import Field from "../components/field"
+import FormPage from "./formPage"
 
 const CREATE_ENTRY = gql`
   mutation createGravityFormsEntry(
@@ -96,11 +94,6 @@ const Form = ({form}) => {
   const pageGroups = getPageGroups(fields)
   const totalPages = pageGroups.length
 
-  const FieldContainer = styled.div`
-    width: 100%;
-    padding: 1.5rem 0;
-  `
-
   return (
     <Mutation mutation={CREATE_ENTRY}>
       {(createGravityFormsEntry, { loading, error }) => (
@@ -119,28 +112,17 @@ const Form = ({form}) => {
             } });
           }}
         >
-          {pageGroups.map((pageGroup, pageIndex) => (
-            <FormPage
-              key={pageIndex}
-              pageIndex={pageIndex}
-              visiblePage={visiblePage}
-              totalPages={totalPages}
-              setVisiblePage={setVisiblePage}
-              submitButtonText={submitButtonText}
-            >
-              {pageGroup.map(field => (
-                <FieldContainer key={field.id}>
-                  <Field
-                    field={field}
-                    formId={formId}
-                    inputs={inputs}
-                    handleInputChange={handleInputChange}
-                    setInputValue={setInputValue}
-                  />
-                </FieldContainer>
-              ))}
-            </FormPage>
-          ))}
+          <FormPage
+            inputs={inputs}
+            pageGroup={pageGroups[visiblePage]}
+            visiblePage={visiblePage}
+            setVisiblePage={setVisiblePage}
+            totalPages={totalPages}
+            formId={formId}
+            submitButtonText={submitButtonText}
+            handleInputChange={handleInputChange}
+            setInputValue={setInputValue}
+          />
           {loading && <p>Loading...</p>}
           {error && <p>Error :( Please try again</p>}
         </form>

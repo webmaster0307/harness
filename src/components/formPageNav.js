@@ -1,6 +1,5 @@
 import React from "react"
 import styled from "styled-components"
-import { warnOnceInDevelopment } from "apollo-utilities";
 
 const FormPageNavContainer = styled.div`
   margin-bottom: 4rem;
@@ -10,17 +9,18 @@ const PreviousButton = styled.button`
     margin-top: 1rem;
 `
 
-const FormPageNav = ({ pageIndex, totalPages, setVisiblePage }) => {
-    const hasPrevPage = () => pageIndex > 0
-    const hasNextPage = () => totalPages > pageIndex + 1
+const FormPageNav = ({ visiblePage, setVisiblePage, totalPages }) => {
+    const hasPrevPage = () => visiblePage > 0
+    const hasNextPage = () => totalPages > visiblePage + 1
+
     const goToPreviousPage = event => {
         event.preventDefault()
-        setVisiblePage(pageIndex - 1)
+        setVisiblePage(visiblePage - 1)
         window.scroll(0,0)
     }
     const goToNextPage = event => {
         event.preventDefault()
-        setVisiblePage(pageIndex + 1)
+        setVisiblePage(visiblePage + 1)
         window.scroll(0,0)
     }
 
