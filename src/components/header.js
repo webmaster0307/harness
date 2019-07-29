@@ -15,7 +15,7 @@ const HeaderInnerWrap = styled.div`
   display: flex;
   margin: 0 auto;
   max-width: 960px;
-  padding: .5rem 1.0875rem;
+  padding: 1rem 1.0875rem;
   justify-content: space-between;
   
 `
