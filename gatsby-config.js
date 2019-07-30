@@ -32,7 +32,7 @@ module.exports = {
         name: `Harness`,
         short_name: `Harness`,
         start_url: `/`,
-        background_color: `#3dc133`,
+        background_color: `#efefef`,
         theme_color: `#3dc133`,
         display: `standalone`,
         icon: `src/images/harness-icon-circle-512.png`,
