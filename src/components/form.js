@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { Link } from "gatsby"
 import gql from 'graphql-tag'
 import { Mutation } from "react-apollo"
 
@@ -19,6 +20,98 @@ const CREATE_ENTRY = gql`
       clientMutationId
       entry {
         entryId
+        dateCreated
+        form {
+          node {
+            title
+          }
+        }
+        fields(first: 500) {
+          edges {
+            node {
+              ... on DateField {
+                type
+                id
+                label
+                dateFormat
+              }
+              ... on MultiSelectField {
+                type
+                id
+                label
+                description
+                choices {
+                  text
+                  value
+                }
+              }
+              ... on PageField {
+                type
+                id
+                label
+              }
+              ... on RadioField {
+                type
+                id
+                label
+                isRequired
+                choices {
+                  text
+                  value
+                }
+              }
+              ... on SectionField {
+                type
+                id
+                label
+                description
+              }
+              ... on SelectField {
+                type
+                id
+                label
+                cssClass
+                isRequired
+                choices {
+                  text
+                  value
+                }
+              }
+              ... on SignatureField {
+                type
+                id
+                label
+              }
+              ... on TextAreaField {
+                type
+                id
+                label
+                cssClass
+                isRequired
+              }
+              ... on TextField {
+                type
+                id
+                label
+                cssClass
+                isRequired
+              }
+            }
+            fieldValue {
+              ... on StringFieldValue {
+                value
+              }
+              ... on AddressFieldValues {
+                street
+                lineTwo
+                city
+                state
+                zip
+                country
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -74,7 +167,7 @@ const Form = ({form}) => {
     let newInputValues = [...otherInputs, { id, value }]
     
     // Fake auto-setting fields for ESFox
-    if (id == 1) {
+    if (Number(id) === 1) {
       // Project Numher
       newInputValues = newInputValues.filter(input => input.id !== 2)
       newInputValues.push({ id: 2, value: String( value * 2683 ) })
@@ -96,37 +189,69 @@ const Form = ({form}) => {
 
   return (
     <Mutation mutation={CREATE_ENTRY}>
-      {(createGravityFormsEntry, { loading, error }) => (
-        <form
-          id={`gravity-form-${formId}`}
-          className="gravity-form"
-          method="post"
-          encType="multipart/form-data"
-          onSubmit={e => {
-            e.preventDefault()
-            console.log(inputs)
-            createGravityFormsEntry({ variables: {
-              clientMutationId: getUuid(),
-              formId,
-              allTextValues: inputs,
-            } });
-          }}
-        >
-          <FormPage
-            inputs={inputs}
-            pageGroup={pageGroups[visiblePage]}
-            visiblePage={visiblePage}
-            setVisiblePage={setVisiblePage}
-            totalPages={totalPages}
-            formId={formId}
-            submitButtonText={submitButtonText}
-            handleInputChange={handleInputChange}
-            setInputValue={setInputValue}
-          />
-          {loading && <p>Loading...</p>}
-          {error && <p>Error :( Please try again</p>}
-        </form>
-      )}
+      {(createGravityFormsEntry, { loading, error, data }) => {
+        if (error) return <p>Sorry, an error has occurred. Please reload the page and try again.</p>;
+
+        if (data) {
+          const { entry: createdEntry } = data.createGravityFormsEntry
+          return (
+            <>
+              <h2>✓ Saved</h2>
+              <p>Form entry has been saved to Harness.</p>
+              <br />
+              <br />
+              <br />
+              <Link
+                to={`/entry/${createdEntry.entryId}`}
+                state={{createdEntry}}
+                className="button button--primary"
+              >
+                Review entry →
+              </Link>
+            </>
+          )
+        }
+
+        return (
+          <form
+            id={`gravity-form-${formId}`}
+            className="gravity-form"
+            method="post"
+            encType="multipart/form-data"
+            onSubmit={e => {
+              e.preventDefault()
+              console.log(inputs)
+              createGravityFormsEntry({ variables: {
+                clientMutationId: getUuid(),
+                formId,
+                allTextValues: inputs,
+              } });
+            }}
+          >
+            <FormPage
+              inputs={inputs}
+              pageGroup={pageGroups[visiblePage]}
+              visiblePage={visiblePage}
+              setVisiblePage={setVisiblePage}
+              totalPages={totalPages}
+              formId={formId}
+              loading={loading}
+              submitButtonText={submitButtonText}
+              handleInputChange={handleInputChange}
+              setInputValue={setInputValue}
+            />
+
+            {/* <button onClick={event => {
+              event.preventDefault()
+              setVisiblePage(totalPages - 1)
+            }}>Go to last page</button>
+            <button onClick={event => {
+              event.preventDefault()
+              console.log(inputs)
+            }}>Console log input state</button> */}
+          </form>
+        )
+      }}
     </Mutation>
   )
 }

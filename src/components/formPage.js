@@ -3,17 +3,16 @@ import styled from 'styled-components'
 import Field from "./field"
 
 import FormPageNav from "./formPageNav"
+import LoadingSpinner from "./loadingSpinner"
 
 const FormContentContainer = styled.div`
   margin-bottom: 4rem;
+  .field-container + .field-container {
+    padding-top: 3rem;
+  }
 `
 
-const FieldContainer = styled.div`
-    width: 100%;
-    padding: 1.5rem 0;
-`
-
-const SubmitButton = styled.input`
+const SubmitButton = styled.button`
   margin-bottom: 4rem;
 `
 
@@ -25,6 +24,7 @@ const FormPage = props => {
         setVisiblePage,
         totalPages,
         formId,
+        loading,
         submitButtonText,
         handleInputChange,
         setInputValue
@@ -36,20 +36,22 @@ const FormPage = props => {
         <>
           <FormContentContainer>
             {pageGroup.map(field => (
-                <FieldContainer key={field.id}>
-                    <Field
-                        field={field}
-                        formId={formId}
-                        inputs={inputs}
-                        handleInputChange={handleInputChange}
-                        setInputValue={setInputValue}
-                    />
-                </FieldContainer>
+              <div key={field.id} className="field-container">
+                <Field
+                  field={field}
+                  formId={formId}
+                  inputs={inputs}
+                  handleInputChange={handleInputChange}
+                  setInputValue={setInputValue}
+                />
+              </div>
             ))}
           </FormContentContainer>
           <FormPageNav visiblePage={visiblePage} setVisiblePage={setVisiblePage} totalPages={totalPages} />
           {isLastPage() &&
-            <SubmitButton type="submit" className="button-primary" value={submitButtonText} />
+            <SubmitButton type="submit" className={`button--primary${loading ? ' button--loading' : ''}`}>
+              {loading ? <LoadingSpinner /> : submitButtonText}
+            </SubmitButton>
           }
         </>
       )

@@ -99,6 +99,7 @@ const GlobalStyle = createGlobalStyle`
     }
   }
   button,
+  .button,
   input[type="submit"] {
     width: 100%;
     padding: 1.35rem;
@@ -107,22 +108,25 @@ const GlobalStyle = createGlobalStyle`
     text-align: center;
     text-transform: uppercase;
     font-size: 1rem;
+    text-decoration: none;
     color: ${props => props.theme.mediumGray};
     background: ${props => props.theme.lightGray};
-
     &:hover, &:active {
         cursor: pointer;
         background: ${props => props.theme.lightGrayDarkened};
     }
-
-    &.button-primary {
-      color: ${props => props.theme.white};
-      background: ${props => props.theme.lightGreen};
-
-      &:hover, &:active {
-          background: ${props => props.theme.lightGreenDarkened};
-      }
+  }
+  .button--primary {
+    color: ${props => props.theme.white};
+    background: ${props => props.theme.lightGreen};
+    &:hover, &:active {
+        background: ${props => props.theme.lightGreenDarkened};
     }
+  }
+  .button--loading {
+    padding-top: 0;
+    padding-bottom: 0;
+    background: ${props => props.theme.lightGreenDarkened};
   }
   .screen-reader {
     border: 0 !important;
@@ -138,8 +142,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const ContentContainer = styled.div`
-  margin-left: 1rem;
-  margin-right: 1rem;
+  margin: 4rem 1rem;
 `
 
 const StyledMain = styled.main`

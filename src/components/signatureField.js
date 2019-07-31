@@ -12,10 +12,10 @@ const SignatureFieldContainer = styled.div`
 `
 
 const SignatureField = ({ formId, field, inputs, handleInputChange }) => {
-  const { id, label, isRequired } = field
+  const { label } = field
   const canvasEl = useRef(null);
   const canvasParentEl = useRef(null);
-  const htmlId = `input_${formId}_${id}`;
+  // const htmlId = `input_${formId}_${id}`;
 
   // Set canvas width to match its parent's width.
   const handleResize = () => {

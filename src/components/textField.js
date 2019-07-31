@@ -6,7 +6,7 @@ const StyledTextInput = styled.input`
 `
 
 const TextField = ({ formId, field, value, handleInputChange, isReadOnly }) => {
-    const { id, label, cssClass, isRequired } = field
+    const { id, label, isRequired } = field
     const htmlId = `input_${formId}_${id}`;
 
     return (
