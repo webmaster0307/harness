@@ -241,11 +241,22 @@ const Form = ({form}) => {
               setInputValue={setInputValue}
             />
 
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <a style={{ cursor:'pointer', fontSize: '14px', textDecoration: 'underline'}} onClick={event => {
+              event.preventDefault()
+              setVisiblePage(totalPages - 1)
+            }}>Go to last page →</a>
+
             {/* <button onClick={event => {
               event.preventDefault()
               setVisiblePage(totalPages - 1)
-            }}>Go to last page</button>
-            <button onClick={event => {
+            }}>Go to last page</button> */}
+            {/* <button onClick={event => {
               event.preventDefault()
               console.log(inputs)
             }}>Console log input state</button> */}
