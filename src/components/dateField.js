@@ -33,7 +33,13 @@ const DateField = props => {
         setInputValue(id, format(dateObject, 'YYYY-MM-DD'))
     }
 
-    const dateObject = value ? new Date(`${value} 00:00:00`) : undefined
+    const dayPickerProps = {}
+
+    if (value) {
+        const dateObject = new Date(`${value} 00:00:00`)
+        dayPickerProps.selectedDays = dateObject
+        dayPickerProps.month = dateObject
+    }
 
     return (
         <DayPickerContainer>
@@ -41,8 +47,7 @@ const DateField = props => {
                 <p>{label}</p>
                 <DayPicker
                     onDayClick={handleDayClick}
-                    selectedDays={dateObject}
-                    month={dateObject || new Date()}
+                    {...dayPickerProps}
                 />
             </DayPickerContents>
         </DayPickerContainer>
