@@ -73,7 +73,7 @@ const Entry = props => {
     )
   }
 
-  if (window) navigate(`/`)
+  if ('undefined' !== typeof window) navigate(`/`)
   return null
 
   // TODO: Fetch the entry fresh and display it, if it's not
