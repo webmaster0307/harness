@@ -1,10 +1,3 @@
-/**
- * Layout component that queries for data
- * with Gatsby's useStaticQuery component
- *
- * See: https://www.gatsbyjs.org/docs/use-static-query/
- */
-
 import React from "react"
 import PropTypes from "prop-types"
 import { useStaticQuery, graphql } from "gatsby"
@@ -12,6 +5,7 @@ import styled, { createGlobalStyle, ThemeProvider } from  "styled-components"
 import 'normalize.css'
 
 import Header from "./header"
+import LogInModal from "./logInModal"
 // import "./layout.css"
 
 export const theme = {
@@ -163,14 +157,14 @@ const Layout = ({ children }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <>
       <Header siteTitle={data.site.siteMetadata.title} />
       <GlobalStyle />
       <ContentContainer>
         <StyledMain>{children}</StyledMain>
-        <footer></footer>
+        <footer>
+          <LogInModal />
+        </footer>
       </ContentContainer>
-      </>
     </ThemeProvider>
   )
 }

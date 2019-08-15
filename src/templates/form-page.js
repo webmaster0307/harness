@@ -5,7 +5,9 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Form from "../components/form"
 
-const FormPage = props => {
+const FormPage = () => <p>Form page component.</p>
+
+const RealFormPage = props => {
   const form = props.data.wpgraphql.gravityFormsForm
   const { title } = form
 
@@ -19,7 +21,8 @@ const FormPage = props => {
 
 export default FormPage
 
-export const formQuery = graphql`
+// export const formQuery = graphql`
+const randoString = `
   query GET_FORM($id: ID!) {
     wpgraphql {
       gravityFormsForm(id: $id) {

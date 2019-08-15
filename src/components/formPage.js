@@ -16,7 +16,9 @@ const SubmitButton = styled.button`
   margin-bottom: 4rem;
 `
 
-const FormPage = props => {
+const FormPage = () => <p>Form Page component.</p>
+
+const RealFormPage = props => {
     const {
         inputs,
         pageGroup,

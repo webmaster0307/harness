@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
 import gql from 'graphql-tag'
-import { Mutation } from "react-apollo"
+import { useMutation } from '@apollo/react-hooks'
 
 import { getUuid } from "../services/utilities"
 import FormPage from "./formPage"
@@ -118,6 +118,7 @@ const CREATE_ENTRY = gql`
 `
 
 const Form = ({form}) => {
+  const [createGravityFormsEntry, { loading, error, data }] = useMutation(CREATE_ENTRY);
   const [inputs, setInputs] = useState([])
   const [visiblePage, setVisiblePage] = useState(0)
   const { formId, button: { text: submitButtonText} } = form
@@ -187,83 +188,77 @@ const Form = ({form}) => {
   const pageGroups = getPageGroups(fields)
   const totalPages = pageGroups.length
 
+  if (error) return <p>Sorry, an error has occurred. Please reload the page and try again.</p>
+
+  if (data) {
+    const { entry: createdEntry } = data.createGravityFormsEntry
+    return (
+      <>
+        <h2>✓ Saved</h2>
+        <p>Form entry has been saved to Harness.</p>
+        <br />
+        <br />
+        <br />
+        <Link
+          to={`/entry/${createdEntry.entryId}`}
+          state={{createdEntry}}
+          className="button button--primary"
+        >
+          Review entry →
+        </Link>
+      </>
+    )
+  }
+
   return (
-    <Mutation mutation={CREATE_ENTRY}>
-      {(createGravityFormsEntry, { loading, error, data }) => {
-        if (error) return <p>Sorry, an error has occurred. Please reload the page and try again.</p>;
-
-        if (data) {
-          const { entry: createdEntry } = data.createGravityFormsEntry
-          return (
-            <>
-              <h2>✓ Saved</h2>
-              <p>Form entry has been saved to Harness.</p>
-              <br />
-              <br />
-              <br />
-              <Link
-                to={`/entry/${createdEntry.entryId}`}
-                state={{createdEntry}}
-                className="button button--primary"
-              >
-                Review entry →
-              </Link>
-            </>
-          )
-        }
-
-        return (
-          <form
-            id={`gravity-form-${formId}`}
-            className="gravity-form"
-            method="post"
-            encType="multipart/form-data"
-            onSubmit={e => {
-              e.preventDefault()
-              console.log(inputs)
-              createGravityFormsEntry({ variables: {
-                clientMutationId: getUuid(),
-                formId,
-                allTextValues: inputs,
-              } });
-            }}
-          >
-            <FormPage
-              inputs={inputs}
-              pageGroup={pageGroups[visiblePage]}
-              visiblePage={visiblePage}
-              setVisiblePage={setVisiblePage}
-              totalPages={totalPages}
-              formId={formId}
-              loading={loading}
-              submitButtonText={submitButtonText}
-              handleInputChange={handleInputChange}
-              setInputValue={setInputValue}
-            />
-
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <a style={{ cursor:'pointer', fontSize: '14px', textDecoration: 'underline'}} onClick={event => {
-              event.preventDefault()
-              setVisiblePage(totalPages - 1)
-            }}>Go to last page →</a>
-
-            {/* <button onClick={event => {
-              event.preventDefault()
-              setVisiblePage(totalPages - 1)
-            }}>Go to last page</button> */}
-            {/* <button onClick={event => {
-              event.preventDefault()
-              console.log(inputs)
-            }}>Console log input state</button> */}
-          </form>
-        )
+    <form
+      id={`gravity-form-${formId}`}
+      className="gravity-form"
+      method="post"
+      encType="multipart/form-data"
+      onSubmit={e => {
+        e.preventDefault()
+        console.log(inputs)
+        createGravityFormsEntry({ variables: {
+          clientMutationId: getUuid(),
+          formId,
+          allTextValues: inputs,
+        } });
       }}
-    </Mutation>
+    >
+      <FormPage
+        inputs={inputs}
+        pageGroup={pageGroups[visiblePage]}
+        visiblePage={visiblePage}
+        setVisiblePage={setVisiblePage}
+        totalPages={totalPages}
+        formId={formId}
+        loading={loading}
+        submitButtonText={submitButtonText}
+        handleInputChange={handleInputChange}
+        setInputValue={setInputValue}
+      />
+
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <a style={{ cursor:'pointer', fontSize: '14px', textDecoration: 'underline'}} onClick={event => {
+        event.preventDefault()
+        setVisiblePage(totalPages - 1)
+      }}>Go to last page →</a>
+
+      {/* <button onClick={event => {
+        event.preventDefault()
+        setVisiblePage(totalPages - 1)
+      }}>Go to last page</button> */}
+      {/* <button onClick={event => {
+        event.preventDefault()
+        console.log(inputs)
+      }}>Console log input state</button> */}
+    </form>
   )
 }
 

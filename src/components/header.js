@@ -3,6 +3,7 @@ import PropTypes from "prop-types"
 import styled from "styled-components"
 import HamburgerIcon from "../components/hamburgerIcon"
 import HarnessPhoneLogo from '../images/harness-logo-phone.png'
+import { isLoggedIn } from "../services/auth"
 
 const StyledHeader = styled.header`
   background-image: linear-gradient(180deg, #0C7418 0%, #0E5814 100%);
@@ -47,6 +48,7 @@ const StyledHeading = styled.h1`
 `
 
 const Header = ({ siteTitle }) => (
+  <>
   <StyledHeader>
     <div className="inner-wrap">
       <div className="icon-container">
@@ -63,6 +65,12 @@ const Header = ({ siteTitle }) => (
       </div>
     </div>
   </StyledHeader>
+  {isLoggedIn() ?
+    <p>Logged in.</p>
+    :
+    <p>Logged out.</p>
+  }
+  </>
 )
 
 Header.propTypes = {
