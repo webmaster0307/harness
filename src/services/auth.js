@@ -59,7 +59,7 @@ export const refreshAuthToken = async () => {
 
   try {
     // TODO: use process.env.WP_API_URL
-    const response = await (await fetch('http://wpgraphql-gf.local/graphql', options)).json()
+    const response = await (await fetch('https://3a350127.ngrok.io/graphql', options)).json()
 
     if (response.errors && response.errors.length) return null
 

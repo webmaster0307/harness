@@ -1,4 +1,5 @@
 import React from "react"
+import { Link } from "gatsby"
 import PropTypes from "prop-types"
 import styled from "styled-components"
 import HamburgerIcon from "../components/hamburgerIcon"
@@ -6,9 +7,10 @@ import HarnessPhoneLogo from '../images/harness-logo-phone.png'
 import { isLoggedIn } from "../services/auth"
 
 const StyledHeader = styled.header`
-  background-image: linear-gradient(180deg, #0C7418 0%, #0E5814 100%);
-  box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50);
+  /* background-image: linear-gradient(180deg, #0C7418 0%, #0E5814 100%); */
+  /* box-shadow: 0 2px 4px 0 rgba(0,0,0,0.50); */
   padding: 1rem 1.0875rem;
+  border-bottom: 2px solid ${props => props.theme.ghostGray};
   .inner-wrap {
     display: flex;
     margin: 0 auto;
@@ -32,21 +34,6 @@ const StyledHeader = styled.header`
   }
 `
 
-const StyledHeading = styled.h1`
-  display: none;
-  @media (min-width: 40rem) {
-    display: block;
-  }
-  flex: 10;
-  margin: 0;
-  text-align: center;
-  text-transform: uppercase;
-  line-height: 2.5rem;
-  font-size: 2rem;
-  font-weight: 400;
-  color: #cacaca;
-`
-
 const Header = ({ siteTitle }) => (
   <>
   <StyledHeader>
@@ -57,21 +44,23 @@ const Header = ({ siteTitle }) => (
         there is a good way to size images by height.
         https://github.com/gatsbyjs/gatsby/issues/14988
         */}
-        <img src={HarnessPhoneLogo} alt="Harness logo" />
+        <Link to="/">
+          <img src={HarnessPhoneLogo} alt="Harness logo" />
+        </Link>
       </div>
-      <StyledHeading>Workplace Inspection</StyledHeading>
       <div className="icon-container">
         <HamburgerIcon />
       </div>
     </div>
   </StyledHeader>
-  {isLoggedIn() ?
-    <p>Logged in.</p>
-    :
-    <p>Logged out.</p>
-  }
   </>
 )
+
+// {isLoggedIn() ?
+//   <p>Logged in.</p>
+//   :
+//   <p>Logged out.</p>
+// }
 
 Header.propTypes = {
   siteTitle: PropTypes.string,

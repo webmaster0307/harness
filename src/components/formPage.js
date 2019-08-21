@@ -16,9 +16,7 @@ const SubmitButton = styled.button`
   margin-bottom: 4rem;
 `
 
-const FormPage = () => <p>Form Page component.</p>
-
-const RealFormPage = props => {
+const FormPage = props => {
     const {
         inputs,
         pageGroup,
@@ -51,7 +49,7 @@ const RealFormPage = props => {
           </FormContentContainer>
           <FormPageNav visiblePage={visiblePage} setVisiblePage={setVisiblePage} totalPages={totalPages} />
           {isLastPage() &&
-            <SubmitButton type="submit" className={`button--primary${loading ? ' button--loading' : ''}`}>
+            <SubmitButton type="submit" className={`button button--green${loading ? ' button--loading' : ''}`}>
               {loading ? <LoadingSpinner /> : submitButtonText}
             </SubmitButton>
           }

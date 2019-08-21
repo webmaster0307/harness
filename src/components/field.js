@@ -1,13 +1,13 @@
 import React from "react"
 
-import DateField from "../components/dateField"
+import DateField from "./dateField"
 import MultiSelectField from "./multiSelectField"
-import RadioField from "../components/radioField"
-import SectionField from "../components/sectionField"
-import SelectField from "../components/selectField"
-import SignatureField from "../components/signatureField"
-import TextField from "../components/textField"
-import TextAreaField from "../components/textAreaField"
+import RadioField from "./radioField"
+import SectionField from "./sectionField"
+import SelectField from "./selectField"
+import SignatureField from "./signatureField"
+import TextField from "./textField"
+import TextAreaField from "./textAreaField"
 
 const Field = ({ field, formId, inputs, handleInputChange, setInputValue }) => {
     const isReadOnly = field => field.cssClass.split(' ').includes('readonly')

@@ -82,7 +82,7 @@ const LogInForm = () => {
           <p className="error">Invalid email address or password. Please try again.</p>
         }
 
-        <button type="submit">Log In</button>
+        <button type="submit" className="button button--green">Log In</button>
       </fieldset>
     </Form>
   )

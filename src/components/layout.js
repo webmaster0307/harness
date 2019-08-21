@@ -9,15 +9,30 @@ import LogInModal from "./logInModal"
 // import "./layout.css"
 
 export const theme = {
+  zucciniGreen: '#05400a',
+  darkFernGreen: '#0e5814',
+  forestGreen: '#207227',
+  seaGreen: '#2f8132',
+  goblinGreen: '#3f9142',
+  fruitSaladGreen: '#57ae5B',
+  deYorkGreen: '#7bc47f',
+  mossGreen: '#a3d9a5',
+  fringyFlowerGreen: '#c1eac5',
+  willowBrookGreen: '#ddeedd',
+  grannyAppleGreen: '#e3f9e5',
+  snowDriftGreen: '#f0f5ee',
+  white: '#fff',
+  heavyMetal: '#323532',
+  ghostGray: '#c6cbd4',
+  contentMaxWidth: '60rem',
+  contentWidth: '92%',
+  borderRadius: '4px',
+
   lightGreen: '#3dc133',
   lightGreenDarkened: '#38b12f',
   lightGray: '#d8d8d8',
   lightGrayDarkened: '#cecece',
   mediumGray: '#737373',
-  white: '#fff',
-  contentWidth: '92%',
-  contentMaxWidth: '950px',
-  borderRadius: '4px',
 }
 
 const GlobalStyle = createGlobalStyle`
@@ -28,8 +43,9 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: inherit;
   }
   html, body {
-    background: #efefef;
+    background: ${props => props.theme.snowDriftGreen};
     font-family: Helvetica, sans-serif;
+    color: ${props => props.theme.heavyMetal};
   }
   form {
     label {
@@ -73,7 +89,6 @@ const GlobalStyle = createGlobalStyle`
       background-repeat: no-repeat, repeat;
       background-position: right 1.35em top 50%, 0 0;
       background-size: .65em auto, 100%;
-
         &::-ms-expand {
             display: none;
         }
@@ -92,35 +107,64 @@ const GlobalStyle = createGlobalStyle`
         }
     }
   }
-  button,
-  .button,
-  input[type="submit"] {
+  .button {
     width: 100%;
     padding: 1.35rem;
-    border: 1px solid #bebebe;
     border-radius: ${props => props.theme.borderRadius};
     text-align: center;
     text-transform: uppercase;
     font-size: 1rem;
     text-decoration: none;
     color: ${props => props.theme.mediumGray};
+    cursor: pointer;
     background: ${props => props.theme.lightGray};
     &:hover, &:active {
-        cursor: pointer;
-        background: ${props => props.theme.lightGrayDarkened};
-    }
-  }
-  .button--primary {
-    color: ${props => props.theme.white};
-    background: ${props => props.theme.lightGreen};
-    &:hover, &:active {
-        background: ${props => props.theme.lightGreenDarkened};
+      background: ${props => props.theme.lightGrayDarkened};
     }
   }
   .button--loading {
     padding-top: 0;
     padding-bottom: 0;
     background: ${props => props.theme.lightGreenDarkened};
+  }
+  .button--small {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.9rem;
+    text-transform: inherit;
+    width: inherit;
+  }
+  .button--transparent {
+    border: 1px solid ${props => props.theme.forestGreen};
+    background: transparent;
+    color: ${props => props.theme.forestGreen};
+    &:hover, &:active {
+      background: ${props => props.theme.forestGreen};
+      color: ${props => props.theme.white};
+    }
+  }
+  .button--light-green {
+    border: 0;
+    color: ${props => props.theme.white};
+    background: ${props => props.theme.goblinGreen};
+    &:hover, &:active {
+      background: ${props => props.theme.seaGreen};
+    }
+  }
+  .button--green {
+    border: 0;
+    color: ${props => props.theme.white};
+    background: ${props => props.theme.forestGreen};
+    &:hover, &:active {
+        background: ${props => props.theme.darkFernGreen};
+    }
+  }
+  .button--dark-green {
+    border: 0;
+    color: ${props => props.theme.white};
+    background: ${props => props.theme.forestGreen};
+    &:hover, &:active {
+      background: ${props => props.theme.darkFernGreen};
+    }
   }
   .screen-reader {
     border: 0 !important;
@@ -140,7 +184,7 @@ const ContentContainer = styled.div`
 `
 
 const StyledMain = styled.main`
-  max-width: 26rem;
+  max-width: ${props => props.theme.contentMaxWidth};
   margin: 0 auto;
 `
 
@@ -157,14 +201,16 @@ const Layout = ({ children }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Header siteTitle={data.site.siteMetadata.title} />
-      <GlobalStyle />
-      <ContentContainer>
-        <StyledMain>{children}</StyledMain>
-        <footer>
-          <LogInModal />
-        </footer>
-      </ContentContainer>
+      <>
+        <Header siteTitle={data.site.siteMetadata.title} />
+        <GlobalStyle />
+        <ContentContainer>
+          <StyledMain>{children}</StyledMain>
+          <footer>
+            {/* <LogInModal /> */}
+          </footer>
+        </ContentContainer>
+      </>
     </ThemeProvider>
   )
 }

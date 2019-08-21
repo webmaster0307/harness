@@ -26,8 +26,8 @@ const FormPageNav = ({ visiblePage, setVisiblePage, totalPages }) => {
 
     return (
         <FormPageNavContainer>
-            {hasNextPage() && <button className="button--primary" onClick={goToNextPage}>Next</button>}
-            {hasPrevPage() && <PreviousButton onClick={goToPreviousPage}>Previous</PreviousButton>}
+            {hasNextPage() && <button className="button button--green" onClick={goToNextPage}>Next</button>}
+            {hasPrevPage() && <PreviousButton className="button" onClick={goToPreviousPage}>Previous</PreviousButton>}
         </FormPageNavContainer>
     )
 }

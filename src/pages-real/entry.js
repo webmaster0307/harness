@@ -67,7 +67,7 @@ const Entry = props => {
         <br />
         <br />
         <div style={{textAlign:'center'}} >
-          <Link to={`/`} className="button button--primary">Submit another entry</Link>
+          <Link to={`/`} className="button button--green">Submit another entry</Link>
         </div>
       </Layout>
     )

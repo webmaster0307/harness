@@ -1,28 +1,32 @@
 import React from "react"
 import { graphql } from "gatsby"
-
+import styled from "styled-components"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import Form from "../components/form"
 
-const FormPage = () => <p>Form page component.</p>
+const FormLayout = styled.div`
+  max-width: 30rem;
+  margin: 0 auto;
+`
 
-const RealFormPage = props => {
+const FormTemplate = props => {
   const form = props.data.wpgraphql.gravityFormsForm
   const { title } = form
 
   return (
     <Layout>
+      <FormLayout>
       <SEO title={title} />
       <Form form={form} />
+      </FormLayout>
     </Layout>
   )
 }
 
-export default FormPage
+export default FormTemplate
 
-// export const formQuery = graphql`
-const randoString = `
+export const GET_FORM = graphql`
   query GET_FORM($id: ID!) {
     wpgraphql {
       gravityFormsForm(id: $id) {
