@@ -221,7 +221,10 @@ const Form = ({form}) => {
         e.preventDefault()
         setfakeLoading(true)
 
-        const localInspections = JSON.parse(localStorage.getItem('localInspections')) || []
+        let localInspections = []
+        if (typeof window === 'object') {
+          localInspections = JSON.parse(localStorage.getItem('localInspections')) || []
+        }
   
         const getInputFieldValue = id => {
           const matches = inputs.filter(input => input.id === id)

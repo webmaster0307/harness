@@ -102,7 +102,10 @@ const IndexPage = props => {
       ? props.data.wpgraphql.gravityFormsEntries.edges
       : []
 
-    const localInspections = JSON.parse(localStorage.getItem('localInspections')) || []
+    let localInspections = []
+    if (typeof window === 'object') {
+      localInspections = JSON.parse(localStorage.getItem('localInspections')) || []
+    }
 
     const entries = remoteEntries.concat(localInspections)
 
