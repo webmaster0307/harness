@@ -4,7 +4,7 @@ import fetch from "isomorphic-unfetch"
 import { getAuthToken, isTokenExpired, refreshAuthToken } from './auth'
 
 export const client = new ApolloClient({
-  uri: 'https://3a350127.ngrok.io/graphql',
+  uri: 'https://absolutesds.meghanmace.com/graphql',
   fetch,
   request: async operation => {
     let token = getAuthToken();
