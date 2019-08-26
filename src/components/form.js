@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Link, navigate } from "gatsby"
-import gql from 'graphql-tag'
-import { useMutation } from '@apollo/react-hooks'
+import gql from "graphql-tag"
+import { useMutation } from "@apollo/react-hooks"
 
 import { getUuid } from "../services/utilities"
 import FormPage from "./formPage"
@@ -12,11 +12,13 @@ const CREATE_ENTRY = gql`
     $formId: Int!
     $allTextValues: [EntryTextValueInput]
   ) {
-    createGravityFormsEntry(input: {
-      clientMutationId: $clientMutationId,
-      formId: $formId,
-      allTextValues: $allTextValues
-    }) {
+    createGravityFormsEntry(
+      input: {
+        clientMutationId: $clientMutationId
+        formId: $formId
+        allTextValues: $allTextValues
+      }
+    ) {
       clientMutationId
       entry {
         entryId
@@ -119,26 +121,31 @@ const CREATE_ENTRY = gql`
 
 const getProjectLocationValue = projectValue => {
   switch (projectValue) {
-    case '1':
-      return '10325 Willodell Rd, Port Robinson, ON L0S 1K0'
-    case '2':
-      return '1812 Sir Isaac Brock Way, St. Catharines, ON L2S 3A1'
-    case '3':
-      return '300 Parkside Ave, Buffalo, NY 14214'
-    case '4':
-      return '237 Barton St E, Hamilton, ON L8L 2X2'
-    case '5':
-      return '102 E Main St, Welland, ON L3B 3W6, Canada'
+    case "1":
+      return "10325 Willodell Rd, Port Robinson, ON L0S 1K0"
+    case "2":
+      return "1812 Sir Isaac Brock Way, St. Catharines, ON L2S 3A1"
+    case "3":
+      return "300 Parkside Ave, Buffalo, NY 14214"
+    case "4":
+      return "237 Barton St E, Hamilton, ON L8L 2X2"
+    case "5":
+      return "102 E Main St, Welland, ON L3B 3W6, Canada"
     default:
-      return ''
+      return ""
   }
 }
 
-const Form = ({form}) => {
-  const [createGravityFormsEntry, { loading, error, data }] = useMutation(CREATE_ENTRY);
+const Form = ({ form }) => {
+  const [createGravityFormsEntry, { loading, error, data }] = useMutation(
+    CREATE_ENTRY
+  )
   const [inputs, setInputs] = useState([])
   const [visiblePage, setVisiblePage] = useState(0)
-  const { formId, button: { text: submitButtonText} } = form
+  const {
+    formId,
+    button: { text: submitButtonText },
+  } = form
   const fields = form.fields.nodes
   const [fakeLoading, setfakeLoading] = useState(false)
 
@@ -147,9 +154,9 @@ const Form = ({form}) => {
     let index = 0
 
     fields.forEach(field => {
-      if ( 'page' !== field.type) {
-        if (!pageGroups[ index ]) pageGroups[ index ] = []
-        pageGroups[ index ].push(field)
+      if ("page" !== field.type) {
+        if (!pageGroups[index]) pageGroups[index] = []
+        pageGroups[index].push(field)
       } else {
         index++
       }
@@ -160,25 +167,25 @@ const Form = ({form}) => {
 
   const handleInputChange = event => {
     const { name, value } = event.target
-    setInputValue( Number(name), value)
+    setInputValue(Number(name), value)
   }
 
   const setInputValue = (id, value) => {
     const otherInputs = inputs.filter(input => input.id !== id)
 
     let newInputValues = [...otherInputs, { id, value }]
-    
+
     // Fake auto-setting fields for ESFox
     if (Number(id) === 1) {
       // Project Numher
       newInputValues = newInputValues.filter(input => input.id !== 2)
-      newInputValues.push({ id: 2, value: String( value * 2683 ) })
+      newInputValues.push({ id: 2, value: String(value * 2683) })
 
       // Project Location
       newInputValues = newInputValues.filter(input => input.id !== 3)
-      newInputValues.push({ id: 3, value: getProjectLocationValue(value)})
+      newInputValues.push({ id: 3, value: getProjectLocationValue(value) })
 
-       // Project Manager
+      // Project Manager
       newInputValues = newInputValues.filter(input => input.id !== 4)
       newInputValues.push({ id: 4, value })
     }
@@ -189,7 +196,10 @@ const Form = ({form}) => {
   const pageGroups = getPageGroups(fields)
   const totalPages = pageGroups.length
 
-  if (error) return <p>Sorry, an error has occurred. Please reload the page and try again.</p>
+  if (error)
+    return (
+      <p>Sorry, an error has occurred. Please reload the page and try again.</p>
+    )
 
   if (data) {
     const { entry: createdEntry } = data.createGravityFormsEntry
@@ -202,7 +212,7 @@ const Form = ({form}) => {
         <br />
         <Link
           to={`/entry/${createdEntry.entryId}`}
-          state={{createdEntry}}
+          state={{ createdEntry }}
           className="button button--green"
         >
           Review entry →
@@ -222,10 +232,11 @@ const Form = ({form}) => {
         setfakeLoading(true)
 
         let localInspections = []
-        if (typeof window === 'object') {
-          localInspections = JSON.parse(localStorage.getItem('localInspections')) || []
+        if (typeof window === "object") {
+          localInspections =
+            JSON.parse(localStorage.getItem("localInspections")) || []
         }
-  
+
         const getInputFieldValue = id => {
           const matches = inputs.filter(input => input.id === id)
           return matches.length ? matches[0].value : null
@@ -235,17 +246,21 @@ const Form = ({form}) => {
           entryId: new Date().valueOf(),
           project: getInputFieldValue(1) || 4,
           projectNumber: getInputFieldValue(2) || 8049,
-          location: getInputFieldValue(3) || '300 Parkside Ave, Buffalo, NY 14214',
-          inspectionDate: getInputFieldValue(8) || '2019-08-21',
+          location:
+            getInputFieldValue(3) || "300 Parkside Ave, Buffalo, NY 14214",
+          inspectionDate: getInputFieldValue(8) || "2019-08-21",
           projectManager: getInputFieldValue(4) || 2,
         })
 
         localInspections.push(localInspection)
-        localStorage.setItem('localInspections', JSON.stringify(localInspections));
+        localStorage.setItem(
+          "localInspections",
+          JSON.stringify(localInspections)
+        )
 
         setTimeout(() => {
           setfakeLoading(false)
-          navigate('/')
+          navigate("/")
         }, 1200)
 
         // console.log(inputs)
@@ -268,18 +283,6 @@ const Form = ({form}) => {
         handleInputChange={handleInputChange}
         setInputValue={setInputValue}
       />
-
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <a style={{ cursor:'pointer', fontSize: '14px', textDecoration: 'underline'}} onClick={event => {
-        event.preventDefault()
-        setVisiblePage(totalPages - 1)
-      }}>Go to last page →</a>
-
       {/* <button onClick={event => {
         event.preventDefault()
         setVisiblePage(totalPages - 1)
@@ -294,7 +297,6 @@ const Form = ({form}) => {
 
 export default Form
 
-
 const getLocalInspectionToStore = args => {
   const {
     entryId,
@@ -306,1486 +308,1486 @@ const getLocalInspectionToStore = args => {
   } = args
 
   return {
-    "node": {
-      "id": "R3Jhdml0eUZvcm1zRW50cnk6MjU=",
-      "entryId": entryId,
-      "fields": {
-        "edges": [
+    node: {
+      id: "R3Jhdml0eUZvcm1zRW50cnk6MjU=",
+      entryId: entryId,
+      fields: {
+        edges: [
           {
-            "node": {
-              "__typename": "WPGraphQL_SelectField",
-              "id": 1,
-              "choices": [
+            node: {
+              __typename: "WPGraphQL_SelectField",
+              id: 1,
+              choices: [
                 {
-                  "text": "Choose a project",
-                  "value": ""
+                  text: "Choose a project",
+                  value: "",
                 },
                 {
-                  "text": "Project 1",
-                  "value": "1"
+                  text: "Project 1",
+                  value: "1",
                 },
                 {
-                  "text": "Project 2",
-                  "value": "2"
+                  text: "Project 2",
+                  value: "2",
                 },
                 {
-                  "text": "Project 3",
-                  "value": "3"
+                  text: "Project 3",
+                  value: "3",
                 },
                 {
-                  "text": "Project 4",
-                  "value": "4"
+                  text: "Project 4",
+                  value: "4",
                 },
                 {
-                  "text": "Project 5",
-                  "value": "5"
-                }
-              ]
+                  text: "Project 5",
+                  value: "5",
+                },
+              ],
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": project
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: project,
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_TextField",
-              "type": "text",
-              "id": 2,
-              "label": "Project Number",
-              "cssClass": "readonly",
-              "isRequired": false
+            node: {
+              __typename: "WPGraphQL_TextField",
+              type: "text",
+              id: 2,
+              label: "Project Number",
+              cssClass: "readonly",
+              isRequired: false,
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": projectNumber
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: projectNumber,
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_TextField",
-              "type": "text",
-              "id": 3,
-              "label": "Project Location",
-              "cssClass": "readonly",
-              "isRequired": false
+            node: {
+              __typename: "WPGraphQL_TextField",
+              type: "text",
+              id: 3,
+              label: "Project Location",
+              cssClass: "readonly",
+              isRequired: false,
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": location
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: location,
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SelectField",
-              "id": 4,
-              "choices": [
+            node: {
+              __typename: "WPGraphQL_SelectField",
+              id: 4,
+              choices: [
                 {
-                  "text": "",
-                  "value": ""
+                  text: "",
+                  value: "",
                 },
                 {
-                  "text": "John Smith",
-                  "value": "1"
+                  text: "John Smith",
+                  value: "1",
                 },
                 {
-                  "text": "Marie Antoinette",
-                  "value": "3"
+                  text: "Marie Antoinette",
+                  value: "3",
                 },
                 {
-                  "text": "Hugh Jackman",
-                  "value": "2"
+                  text: "Hugh Jackman",
+                  value: "2",
                 },
                 {
-                  "text": "Beth Gibbons",
-                  "value": "4"
+                  text: "Beth Gibbons",
+                  value: "4",
                 },
                 {
-                  "text": "Liam Howlett",
-                  "value": "5"
-                }
-              ]
+                  text: "Liam Howlett",
+                  value: "5",
+                },
+              ],
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": projectManager
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: projectManager,
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": "Monthly"
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "Monthly",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_DateField",
-              "id": 8
+            node: {
+              __typename: "WPGraphQL_DateField",
+              id: 8,
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: inspectionDate,
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": inspectionDate
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_MultiSelectField"
+            node: {
+              __typename: "WPGraphQL_MultiSelectField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_MultiSelectFieldValues"
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_MultiSelectFieldValues",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "yes",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": "yes"
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": "yes"
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "yes",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "yes",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": "yes"
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": "n-a"
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "n-a",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SectionField"
+            node: {
+              __typename: "WPGraphQL_SectionField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_RadioField"
+            node: {
+              __typename: "WPGraphQL_RadioField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": ""
-            }
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "",
+            },
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_PageField"
+            node: {
+              __typename: "WPGraphQL_PageField",
             },
-            "fieldValue": null
+            fieldValue: null,
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_TextAreaField"
+            node: {
+              __typename: "WPGraphQL_TextAreaField",
+            },
+            fieldValue: {
+              __typename: "WPGraphQL_StringFieldValue",
+              value: "asdfasdfasdf!",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_StringFieldValue",
-              "value": "asdfasdfasdf!"
-            }
           },
           {
-            "node": {
-              "__typename": "WPGraphQL_SignatureField"
+            node: {
+              __typename: "WPGraphQL_SignatureField",
             },
-            "fieldValue": {
-              "__typename": "WPGraphQL_SignatureFieldValue"
-            }
-          }
-        ]
-      }
-    }
+            fieldValue: {
+              __typename: "WPGraphQL_SignatureFieldValue",
+            },
+          },
+        ],
+      },
+    },
   }
 }
