@@ -1,17 +1,17 @@
 import decode from 'jwt-decode'
-import { getUserData, storeUserData } from './userData'
+import { getUserData, storeUserData, deleteUserData } from './userData'
 import { getUuid } from './utilities'
 
 // Returns null if token is nonexistent.
 export const getAuthToken = () => {
   const userData = getUserData()
-  return userData && userData['authToken'] ? userData['authToken'] : null
+  return userData && userData['user'].jwtAuthToken ? userData['user'].jwtAuthToken : null
 }
 
 // Returns null if token is nonexistent.
 export const getRefreshToken = () => {
   const userData = getUserData()
-  return userData && userData['refreshToken'] ? userData['refreshToken'] : null
+  return userData && userData['user'].jwtRefreshToken ? userData['user'].jwtRefreshToken : null
 }
 
 const getTokenExpirationDate = token => {
@@ -84,3 +84,7 @@ export const isLoggedIn = async () => {
 }
 
 export const convertUserIdToRelayId = userId => btoa(`user:${userId}`)
+
+export const logout = () => {
+  deleteUserData({})
+}
