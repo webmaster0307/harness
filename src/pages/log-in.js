@@ -4,10 +4,12 @@ import SEO from "../components/seo"
 import LogInForm from "../components/logInForm"
 
 const LogInPage = () => (
-    <Layout>
-        <SEO title="Log In" />
-        <LogInForm />
-    </Layout>
+    <ContextProvider>
+        <Layout>
+            <SEO title="Log In" />
+            <LogInForm />
+        </Layout>
+    </ContextProvider>
 )
 
 export default LogInPage
