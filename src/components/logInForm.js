@@ -50,9 +50,10 @@ const LogInForm = () => {
       setEmail('')
       setPassword('')
       setIsLoggedIn(true)
-      alert("login provider status:", toString(isLoggedIn))
+      console.log(isLoggedIn)
     }    
   }
+  console.log(isLoggedIn)
 
   const validateEmail = (value) => {
     const errors = []
