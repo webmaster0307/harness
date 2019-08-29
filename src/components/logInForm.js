@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react"
 import { useMutation } from "@apollo/react-hooks"
 import gql from "graphql-tag"
 
+import { UserContext } from '../context/user'
 import { getUuid } from "../services/utilities"
 import { storeUserData } from "../services/userData"
 import InputField from "./inputField"
@@ -35,7 +36,8 @@ const LogInForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [logIn, { loading, error, data }] = useMutation(LOG_IN)
-  
+  const { isLoggedIn, setIsLoggedIn } = useContext(UserContext)
+
   const handleSubmit = async e => {
     e.preventDefault()
     if(validateForm){
@@ -46,7 +48,9 @@ const LogInForm = () => {
       } })
       data && storeUserData(data.login)
       setEmail('')
-      setPassword('')     
+      setPassword('')
+      setIsLoggedIn(true)
+      alert("login provider status:", toString(isLoggedIn))
     }    
   }
 
