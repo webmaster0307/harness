@@ -1,8 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useContext } from "react"
 import { useMutation } from "@apollo/react-hooks"
 import gql from "graphql-tag"
 
 import { getUuid } from "../services/utilities"
+import { storeUserData } from "../services/userData"
+import InputField from "./inputField"
 
 const LOG_IN = gql`
   mutation LOG_IN(
@@ -16,75 +18,104 @@ const LOG_IN = gql`
         username: $username,
         password: $password,
       }
-    ) {
-      authToken
-      refreshToken
+    ) {      
       user {
         userId
         firstName
         lastName
         email
-        language
+        jwtAuthToken
+        jwtRefreshToken
       }
     }
   }
-`;
+`
 
 const LogInForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [logIn, { loading, error, data }] = useMutation(LOG_IN)
-
+  
   const handleSubmit = async e => {
     e.preventDefault()
-    await logIn({ variables: {
-      clientMutationId: getUuid(),
-      username: email,
-      password,
-    } })
-    data && storeUserData(data.login)
-    setEmail('')
-    setPassword('')
+    if(validateForm){
+      await logIn({ variables: {
+        clientMutationId: getUuid(),
+        username: email,
+        password,
+      } })
+      data && storeUserData(data.login)
+      setEmail('')
+      setPassword('')     
+    }    
+  }
+
+  const validateEmail = (value) => {
+    const errors = []
+    const re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i
+    if (!re.test(value)) {
+      errors.push('Must be a valid email.')
+    }
+    if (value === '') {
+      errors.push('Email is required')
+    }
+    return errors
+  }
+
+  const validateText = (value) => {
+    const errors = []
+    if (value === '') {
+      errors.push('Password is required')
+    }
+    return errors
+  }
+
+  const validateForm = () => {
+    const errors = []
+      .concat(this.validateText(this.state.name))
+      .concat(this.validateEmail(this.state.email))
+      .concat(this.validateText(this.state.message))
+    return errors.length === 0
   }
 
   return (
-    <Form method="post" onSubmit={handleSubmit}>
-      <fieldset disabled={loading} aria-busy={loading}>
-        <label htmlFor="log-in-email">
-          Email
-          <input
-            id="log-in-email"
-            type="email"
-            name="email"
-            placeholder="Email"
-            autoComplete="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
-            required
-          />
-        </label>
+      <form method="post" onSubmit={handleSubmit}>
+        <fieldset disabled={loading} aria-busy={loading}>
+          <label htmlFor="log-in-email">
+            Email
+            <InputField
+              id="log-in-email"
+              type="email"
+              name="email"
+              placeholder="Email"
+              autoComplete="email"
+              value={email}
+              handleChange={e => setEmail(e.target.value)}
+              errors={validateEmail(email)}
+            />
+          </label>
 
-        <label htmlFor="log-in-password">
-          Password
-          <input
-            id="log-in-password"
-            type="password"
-            name="password"
-            placeholder="Password"
-            autoComplete="current-password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            required
-          />
-        </label>
+          <label htmlFor="log-in-password">
+            Password
+            <InputField
+              id="log-in-password"
+              type="password"
+              name="password"
+              placeholder="Password"
+              autoComplete="current-password"
+              value={password}
+              handleChange={e => setPassword(e.target.value)}
+              errors={validateText(password)}
+            />
+          </label>
 
-        {error && 
-          <p className="error">Invalid email address or password. Please try again.</p>
-        }
+          {error && 
+            <p className="error">Invalid email address or password. Please try again.</p>
+          }
 
-        <button type="submit" className="button button--green">Log In</button>
-      </fieldset>
-    </Form>
+          <button type="submit" className="button button--green">Log In</button>
+        </fieldset>
+      </form> 
   )
 }
 
