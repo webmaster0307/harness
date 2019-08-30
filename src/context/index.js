@@ -1,2 +1,2 @@
 export * from './user'
-export { ContextProvider } from './ContextProvider'
+export { ContextProvider } from './contextProvider'
