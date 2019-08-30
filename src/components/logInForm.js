@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import { useMutation } from "@apollo/react-hooks"
 import gql from "graphql-tag"
 
@@ -38,20 +38,23 @@ const LogInForm = () => {
   const [logIn, { loading, error, data }] = useMutation(LOG_IN)
   const { isLoggedIn, setIsLoggedIn } = useContext(UserContext)
 
-  const handleSubmit = async e => {
+  useEffect(() => {
+    if (loading || !data) return
+    storeUserData(data.login)
+    setEmail('')
+    setPassword('')
+    setIsLoggedIn(true)
+    alert('successfully logged in')
+  }, [loading, data])
+
+  const handleSubmit = e => {
     e.preventDefault()
     if(validateForm){
-      await logIn({ variables: {
+      logIn({ variables: {
         clientMutationId: getUuid(),
         username: email,
         password,
       } })
-      data && storeUserData(data.login)
-      setEmail('')
-      setPassword('')
-      setIsLoggedIn(true)
-      console.log('global context:', isLoggedIn)
-      alert('successfully logged in')
     }    
   }
   console.log('global context:', isLoggedIn)

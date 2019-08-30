@@ -8,7 +8,7 @@ export const UserProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false)  
   useEffect(() => {
     const token = getAuthToken()
-    if(token && isTokenExpired(token)){
+    if(token && !isTokenExpired(token)){
         setIsLoggedIn(true)
     }
   }, [])
