@@ -1,3 +1,10 @@
 .is-danger {
-    color: red;
+  color: red;
+}
+
+.input-field {
+  width:100%;
+  padding: 1.35rem;
+  border: 1px solid #aaa;
+  border-radius: 4px;
 }

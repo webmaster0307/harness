@@ -1,23 +1,15 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react"
 import "./inputField.css"
 
-const StyledInputField = styled.input`
-    width:100%
-    padding: 1.35rem
-    border: 1px solid #aaa
-    border-radius: 4px
-`
-
 const InputField = ({name, type, errors, placeholder, value, handleChange}) => {
-  let classes = 'input'
+  let classes = 'input-field'
   if (errors.length > 0) {
     classes += ' is-danger'
   }
   return (
     <div className="field">
       <div className="control">
-        <StyledInputField
+        <input
           type={type}
           className={classes}
           name={name}

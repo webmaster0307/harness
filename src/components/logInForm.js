@@ -2,10 +2,10 @@ import React, { useState, useContext } from "react"
 import { useMutation } from "@apollo/react-hooks"
 import gql from "graphql-tag"
 
-import { UserContext } from '../context/user'
+import InputField from "./inputField"
+import { UserContext } from "../context/user"
 import { getUuid } from "../services/utilities"
 import { storeUserData } from "../services/userData"
-import InputField from "./inputField"
 
 const LOG_IN = gql`
   mutation LOG_IN(
@@ -50,10 +50,11 @@ const LogInForm = () => {
       setEmail('')
       setPassword('')
       setIsLoggedIn(true)
-      console.log(isLoggedIn)
+      console.log('global context:', isLoggedIn)
+      alert('successfully logged in')
     }    
   }
-  console.log(isLoggedIn)
+  console.log('global context:', isLoggedIn)
 
   const validateEmail = (value) => {
     const errors = []
